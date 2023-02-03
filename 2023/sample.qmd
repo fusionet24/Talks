@@ -1,0 +1,341 @@
+---
+title: "Databricks Tips #01"
+subtitle: "10 Things you (probably) should know about Databricks"
+format:
+  pdf
+  
+  
+resources:
+  - demo.pdf
+---
+
+## About Scott👨‍💻👨‍🔬📊
+
+::: columns
+::: {.column width="35%"}
+![](images/certs2.png){width="252"}
+:::
+
+::: {.column width="62%"}
+-   Senior Consultant at Avanade.
+-   Avanade UK&I Databricks SME
+-   Interested in Azure Data Platforms, Architecture and Design Patterns
+-   Masters Degree in Computer Science Focusing on Machine Learning
+-   Passionate about Beer🍺 & Rugby League 🏉
+:::
+:::
+
+::: footer
+:::
+
+## About DailyDatabricks {background-color="darkred"}
+
+A project that aims todo
+
+::: incremental
+-   Provide Small actionable pieces of information
+-   Document the Undocumented
+-   Allow me to Implement **D-R-Y** (Do not repeat yourself) IRL
+:::
+
+. . .
+
+<br/> Learn new and wonderful hacks! 🤠
+
+::: footer
+Learn more: [Daily Databricks](https://quarto.org/docs/presentations/revealjs/#incremental-lists)
+:::
+
+## Notebook Context {auto-animate="true"}
+
+-   Get Metadata & Context on your current notebook environment
+-   User Credentials (email, IPs, @azuread
+ object ids)
+- Browser details & language
+- Cluster Ids
+
+``` {.python code-line-numbers="0|1|3-5|7" code-overflow="wrap"}
+import json
+dbutils.notebook.entry_point.getDbutils().notebook().getContext()
+
+dbutils.notebook.entry_point.getDbutils().notebook().getContext() \
+  .notebookPath() \
+  .toString() 
+
+
+
+json.loads(dbutils.notebook.entry_point.getDbutils().notebook().getContext().toJson())
+```
+
+::: footer
+Learn more: [Twitter Thread](https://twitter.com/DailyDatabricks/status/1536723212884656128/)
+:::
+
+
+
+## Properties
+
+``` json
+{'rootRunId': None,
+ 'currentRunId': None,
+ 'jobGroup': '3390617077668218965_7460294295175766547_89e1d0119f914af39bafdb017336882e',
+ 'tags': {'opId': 'ServerBackend-54787e706ebf268a',
+  'shardName': 'az-eastus-c3',
+  'opTarget': 'com.databricks.backend.common.rpc.InternalDriverBackendMessages$StartRepl',
+  'clusterMemory': '8192',
+  'serverBackendName': 'com.databricks.backend.daemon.driver.DriverCorral',
+  'notebookId': '2048538015852092',
+  'projectName': 'driver',
+  'tier': 'tier-multitenant',
+  'eventWindowTime': '2254196.899999991',
+  'httpTarget': '/notebook/2048538015852092/command/3362446343388373',
+  'commandRunId': 'dddd47ee-68fe-4fd2-9042-fbde8fd28a8e',
+  'buildHash': '',
+  'workspaceRoutingTarget': 'null',
+  'browserHash': '#notebook/2048538015852092/command/3362446343388373',
+  'host': '10.139.64.4',
+  'browserPathName': '/',
+  'notebookLanguage': 'sql',
+  'workspaceRoutingBucket': 'null',
+  'sparkVersion': '12.1.x-scala2.12',
+  'hostName': 'cons-webapp-0',
+  'httpMethod': 'POST',
+  'browserIdleTime': '411',
+  'jettyRpcJettyVersion': '9',
+  'browserLanguage': 'en-GB',
+  'browserTabId': '99fc6c79-18df-4ff9-b0e7-35df3da8bc08',
+  'sourceIpAddress': '82.69.55.63',
+  'loadedUiVersions': 'Map(monolith -> f03dcdb1e979dfefcf2f878284c318bd21970a5d)',
+  'browserUserAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+  'orgId': '2675080094955785',
+  'userAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+  'clusterId': '0120-154009-7bof0jyo',
+  'serverEventId': 'CgwIusXzngYQ9+mEqAIQgAQYiQE6EKeKn3/v7UOlvUQlALPm2wI=',
+  'rootOpId': 'ServiceMain-8ef19d61f07f0002',
+  'requestIdWasMissing': 'true',
+  'sessionId': 'd9be357a4121697a1de52d1c3b447874315900e2b5a5054b8aa92576f1e865be',
+  'clusterCreator': 'fusionet24@hotmail.com',
+  'originatedFromEnvoy': 'true',
+  'clientBranchName': 'webapp_2023-01-27_23.45.48Z_master_b5b81920_1040710074',
+  'clientTimestamp': '1675421567053',
+  'clusterType': 'spot',
+  'requestId': 'CgwIusXzngYQ4/r7pwIQgAQYiQE6EKeKn3/v7UOlvUQlALPm2wI=',
+  'browserHasFocus': 'true',
+  'userId': '8925728005363108',
+  'browserIsHidden': 'false',
+  'principalIdpId': 'd7eb5413-6c62-4fdc-9681-2a44ac84ad9c',
+  'clientLocale': 'en',
+  'branchName': 'webapp_2023-01-27_23.45.48Z_master_b5b81920_1040710074',
+  'opType': 'ServerBackend',
+  'sourcePortNumber': '0',
+  'user': 'fusionet24@hotmail.com',
+  'principalIdpObjectId': 'd3b267b3-1bb4-435e-8c8f-7d667872153d',
+  'browserHostName': 'adb-2675080094955785.5.azuredatabricks.net',
+  'parentOpId': 'RPCClient-8ef19d61f07f11ae',
+  'jettyRpcType': 'InternalDriverBackendMessages$DriverBackendRequest'},
+ 'extraContext': {'allowStdin': 'true',
+  'non_uc_api_token': '',
+  'commandResultJsonMaxBytes': '20971520',
+  'notebook_path': '/sqlsdamples',
+  'thresholdForStoringInDbfs': '10000',
+  'enableStoringResultsInDbfs': 'true',
+  'api_url': 'https://eastus-c3.azuredatabricks.net',
+  'aclPathOfAclRoot': '/workspace/2048538015852092',
+  'api_token': '[REDACTED]'},
+ 'credentialKeys': ['adls_aad_token',
+  'adls_gen2_aad_token',
+  'synapse_aad_token']}
+  ```
+
+## {auto-animate="true" background-image="images/drake_meme_code_click_notebook_context.jpg" background-size="contain"}
+
+## Examples {auto-animate="true"}
+
+
+``` python
+def get_current_cell(notebook_context):
+  return str('https://' + notebook_context['tags']['browserHostName'] + '/' + '?o=' + str(notebook_context['tags']['orgId']) + '#' + notebook_context['tags']['httpTarget'][1:])
+```
+
+
+
+
+``` json
+
+https://adb-2675080094955785.5.azuredatabricks.net/?o=2675080094955785#notebook/150637481915726/command/156728144655279'
+```
+
+
+
+## Configiruation Objects
+
+Spark configurations for customisation, optimisations etc can be set at a Cluster Level or at session Level.
+
+Cluster Level is usually the best so you can have uniform configurations across platform workloads
+
+## {auto-animate="true" background-image="images/clusterinit.png" background-size="contain"}
+
+
+## Spark Config
+
+Setting configurations at a session level allows customisations for specific workloads. 
+
+Get Properties
+``` python
+spark.conf.get("spark.<name-of-property>")
+
+```
+Set properties
+
+``` python
+spark.conf.set("spark.sql.<name-of-property>", <value>)
+
+```
+
+## {auto-animate="true" background-image="images/sparkconf1.png" background-size="contain"}
+
+## Spark Config
+
+Have you hit spark result size exceptions when using collect() or toPandas(), or writing large files from the driver nodes?
+
+You can modify the Maximum Result Size of your Driver Node.
+
+Doing this should be generally be avoided ‼️ 
+
+1. You should first consider if you can remove the Serializing of your results to the driver node. 
+
+2. Remember that you're constrained by the underlying memory of your driver
+
+3. Avoid setting 0 as your value could cause instability
+
+
+## {auto-animate="true" background-image="images/maxdriversize.jpg" background-size="contain"}
+
+
+## Describe Stuff {auto-animate="true"}
+
+- You can Describe tables and get various properties
+
+::: incremental
+- Describe table gives you Schema Level Information
+- Show Create Table Script helps you recreate tables
+- Describe Table Extended allows you schema + partitioning + catalogue metadata
+:::
+
+## {auto-animate="true" background-image="images/table_extended.png" background-size="contain"}
+
+
+## Default Values in Tables
+
+Databricks Runtime 11.2+ supports default values in tables for CSV, JSON, PARQUET & ORC. 
+
+![](images/default.png){width="252"}
+
+
+## Delta {auto-animate="true"}
+::: incremental
+
+- Open data format built by databricks
+- ACID compliant format based on Parquet
+- Is the default format since Databricks Runtime 8.4
+- Has an open source implementation now too! (delta-rs)
+
+![](images/deltars.png){width="252"}
+:::
+
+::: footer
+Learn more: [Delta RS](https://github.com/delta-io/delta-rs)
+:::
+
+## Turn Delta tables to Append only{auto-animate="true"}
+::: incremental
+- Make Delta Tables Block deletes and merges as a table property!
+- Helpful for Ingestion/Raw/Audit Layers
+- Implements WORM at a table level
+
+:::
+
+```sql
+ALTER TABLE table_name SET TBLPROPERTIES ('delta.appendOnly' = 'true');
+
+```
+
+## Delta Defaults {auto-animate="true"}
+
+
+- You can configure defaults for delta tables created within your session!
+- Helpful to ensure all tables created within linked notebooks/processes share the same config!
+
+Achieved this way **spark.databricks.delta.properties.defaults.<conf>**
+
+``` sql
+
+SET spark.databricks.delta.properties.defaults.appendOnly = true
+
+```
+::: footer
+
+Learn more: [Delta table properties](https://learn.microsoft.com/en-us/azure/databricks/delta/table-properties)
+
+:::
+
+## Databricks Partition Best Practice {auto-animate="true"}
+
+- Databricks recommends you do not partition tables that contains less than a terabyte of data.
+- Databricks recommends all partitions contain at least a gigabyte of data. Tables with fewer, larger partitions tend to outperform tables with many smaller partitions.
+- Transactions are not defined by partition boundaries. Delta Lake ensures ACID through transaction logs, so you do not need to separate a batch of data by a partition to ensure atomic discovery.
+- Recently introduced IngestionTimeClustering can manage common partitioning patterns for you! (11.2+)
+
+Learn more: [Partitioning Best Practices](https://learn.microsoft.com/en-us/azure/databricks/tables/partitions)
+
+## Delta Retention Logs {auto-animate="true"}
+
+::: incremental
+
+VACUUM removes all files from the table directory that are not managed by Delta, as well as data files that are no longer in the latest state of the transaction log for the table.Vacuum deletes only data files, not log files. Log files are deleted automatically and asynchronously after checkpoint operations. 
+
+- delta.logRetentionDuration = "interval <interval>": controls how long the history for a table is kept. 
+
+
+- delta.deletedFileRetentionDuration = "interval <interval>": controls how long ago a file must have been deleted before being a candidate for VACUUM.
+
+:::
+
+
+![](images/DeltaLog.png)
+
+
+::: footer
+Learn more: [Delta Data Rentention](https://docs.delta.io/latest/delta-batch.html#-data-retention)
+:::
+
+
+
+## Column Mapping 
+
+
+- Delta column mapping feature provided in Delta 2.0!!
+- Decouples the data fields and the metadata
+- Allows Delta table columns to use characters that are not allowed by Parquet. E.g. Spaces
+- Available in Databricks Runtime 10.2 and above.
+- Enabling column mapping for a table upgrades the Delta table version. This protocol upgrade is irreversible. 
+
+*Note this only removes the metadata (is a soft delete) unless you use the reorg feature to rewrite the physical files. 
+
+::: footer
+Learn more: [Delta Colum Mapping](https://twitter.com/DailyDatabricks/status/1564447824644915205?s=20&t=5eE__i141i2LPR9_uwnEOQ)
+:::
+## {auto-animate="true" background-image="images/columns.jpg" background-size="contain"}
+
+
+## New Databricks Notebook Kernel
+
+- Ipython based! 
+- Allows for all sorts of funky new solutions such as Ipython Widgets and better interactivity
+- Custom Magics such as %scott
+
+![](images/datetime.png)
+
+
+## Thanks for listening
+
