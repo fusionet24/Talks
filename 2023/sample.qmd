@@ -1,12 +1,23 @@
 ---
-title: "Databricks Tips #01"
-subtitle: "10 Things you (probably) should know about Databricks"
+title: "10 Things"
+subtitle: "you (probably) should know about Databricks"
 format:
-  pdf
-  
-  
-resources:
-  - demo.pdf
+  revealjs: 
+    theme: blood
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/logo.jpg
+    footer: <https://twitter.com/dailydatabricks>
+    highlight-style: dracula
+    code-overflow: wrap
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    multiplex: 
+      id: '5f0a5ee9861f50a4'
+      secret: '166083769571176296'
+
 ---
 
 ## About Scott👨‍💻👨‍🔬📊
@@ -17,11 +28,13 @@ resources:
 :::
 
 ::: {.column width="62%"}
--   Senior Consultant at Avanade.
--   Avanade UK&I Databricks SME
+
+-   Fully Remote Contractor Principal Consultant (Currently at [Advancing Analytics]())
+-   Former Avanade UK&I Databricks SME & Altius Consultant
 -   Interested in Azure Data Platforms, Architecture and Design Patterns
 -   Masters Degree in Computer Science Focusing on Machine Learning
 -   Passionate about Beer🍺 & Rugby League 🏉
+
 :::
 :::
 
@@ -46,23 +59,22 @@ A project that aims todo
 Learn more: [Daily Databricks](https://quarto.org/docs/presentations/revealjs/#incremental-lists)
 :::
 
-## Notebook Context {auto-animate="true"}
-
+## 1. Notebook Context {auto-animate="true" }
+::: {.callout-tip title="Beginner TIP" appearance="simple"}
+:::
 -   Get Metadata & Context on your current notebook environment
 -   User Credentials (email, IPs, @azuread
  object ids)
 - Browser details & language
 - Cluster Ids
 
-``` {.python code-line-numbers="0|1|3-5|7" code-overflow="wrap"}
+``` {.python code-line-numbers="0|2|4-6|8" code-overflow="wrap"}
 import json
 dbutils.notebook.entry_point.getDbutils().notebook().getContext()
 
 dbutils.notebook.entry_point.getDbutils().notebook().getContext() \
   .notebookPath() \
   .toString() 
-
-
 
 json.loads(dbutils.notebook.entry_point.getDbutils().notebook().getContext().toJson())
 ```
@@ -73,9 +85,9 @@ Learn more: [Twitter Thread](https://twitter.com/DailyDatabricks/status/15367232
 
 
 
-## Properties
+## 1. Properties
 
-``` json
+``` {.json code-line-numbers="0|13|29|34|53|53-54" code-overflow="wrap"}
 {'rootRunId': None,
  'currentRunId': None,
  'jobGroup': '3390617077668218965_7460294295175766547_89e1d0119f914af39bafdb017336882e',
@@ -149,16 +161,13 @@ Learn more: [Twitter Thread](https://twitter.com/DailyDatabricks/status/15367232
 
 ## {auto-animate="true" background-image="images/drake_meme_code_click_notebook_context.jpg" background-size="contain"}
 
-## Examples {auto-animate="true"}
+## 1. Examples {auto-animate="true"}
 
 
 ``` python
 def get_current_cell(notebook_context):
   return str('https://' + notebook_context['tags']['browserHostName'] + '/' + '?o=' + str(notebook_context['tags']['orgId']) + '#' + notebook_context['tags']['httpTarget'][1:])
 ```
-
-
-
 
 ``` json
 
@@ -167,16 +176,44 @@ https://adb-2675080094955785.5.azuredatabricks.net/?o=2675080094955785#notebook/
 
 
 
+## 2. Describe Stuff {auto-animate="true"}
+::: {.callout-tip}
+### Beginner TIP
+:::
+- You can Describe tables and get various properties
+
+::: incremental
+- Describe table gives you Schema Level Information
+- Show Create Table Script helps you recreate tables
+- Describe Table Extended allows you schema + partitioning + catalogue metadata
+:::
+## 2. Describe Stuff {auto-animate="true"}
+
+Every needed to retrieve the partition columns of a table at run time?
+
+You can with something like this
+
+```python
+spark.sql("describe detail <db_here>.<your_table>").select("partitionColumns")
+```
+
+
+## {auto-animate="true" background-image="images/table_extended.png" background-size="contain"}
+
+
 ## Configiruation Objects
 
 Spark configurations for customisation, optimisations etc can be set at a Cluster Level or at session Level.
 
-Cluster Level is usually the best so you can have uniform configurations across platform workloads
+Cluster Level is usually the best so you can have uniform configurations across platform workloads and allowsa different configurations for different usecases/workloads
 
 ## {auto-animate="true" background-image="images/clusterinit.png" background-size="contain"}
 
 
-## Spark Config
+## 3. Spark Config
+::: {.callout-tip}
+### Intermediate TIP
+:::
 
 Setting configurations at a session level allows customisations for specific workloads. 
 
@@ -189,12 +226,11 @@ Set properties
 
 ``` python
 spark.conf.set("spark.sql.<name-of-property>", <value>)
-
 ```
 
 ## {auto-animate="true" background-image="images/sparkconf1.png" background-size="contain"}
 
-## Spark Config
+## 3. Spark Config
 
 Have you hit spark result size exceptions when using collect() or toPandas(), or writing large files from the driver nodes?
 
@@ -212,20 +248,12 @@ Doing this should be generally be avoided ‼️
 ## {auto-animate="true" background-image="images/maxdriversize.jpg" background-size="contain"}
 
 
-## Describe Stuff {auto-animate="true"}
 
-- You can Describe tables and get various properties
-
-::: incremental
-- Describe table gives you Schema Level Information
-- Show Create Table Script helps you recreate tables
-- Describe Table Extended allows you schema + partitioning + catalogue metadata
+## 4. Default Values in Tables
+::: {.callout-tip}
+### Beginner TIP
 :::
 
-## {auto-animate="true" background-image="images/table_extended.png" background-size="contain"}
-
-
-## Default Values in Tables
 
 Databricks Runtime 11.2+ supports default values in tables for CSV, JSON, PARQUET & ORC. 
 
@@ -247,7 +275,10 @@ Databricks Runtime 11.2+ supports default values in tables for CSV, JSON, PARQUE
 Learn more: [Delta RS](https://github.com/delta-io/delta-rs)
 :::
 
-## Turn Delta tables to Append only{auto-animate="true"}
+## 5. Turn Delta tables to Append only{auto-animate="true"}
+::: {.callout-tip}
+### Intermediate TIP
+:::
 ::: incremental
 - Make Delta Tables Block deletes and merges as a table property!
 - Helpful for Ingestion/Raw/Audit Layers
@@ -260,8 +291,10 @@ ALTER TABLE table_name SET TBLPROPERTIES ('delta.appendOnly' = 'true');
 
 ```
 
-## Delta Defaults {auto-animate="true"}
-
+## 6. Delta Defaults {auto-animate="true"}
+::: {.callout-tip}
+### Intermediate TIP
+:::
 
 - You can configure defaults for delta tables created within your session!
 - Helpful to ensure all tables created within linked notebooks/processes share the same config!
@@ -288,7 +321,10 @@ Learn more: [Delta table properties](https://learn.microsoft.com/en-us/azure/dat
 
 Learn more: [Partitioning Best Practices](https://learn.microsoft.com/en-us/azure/databricks/tables/partitions)
 
-## Delta Retention Logs {auto-animate="true"}
+## 7. Delta Retention Logs {auto-animate="true"}
+::: {.callout-tip}
+### Advanced TIP
+:::
 
 ::: incremental
 
@@ -311,8 +347,10 @@ Learn more: [Delta Data Rentention](https://docs.delta.io/latest/delta-batch.htm
 
 
 
-## Column Mapping 
-
+## 8. Column Mapping 
+::: {.callout-tip}
+### Intermediate TIP
+:::
 
 - Delta column mapping feature provided in Delta 2.0!!
 - Decouples the data fields and the metadata
@@ -327,9 +365,36 @@ Learn more: [Delta Colum Mapping](https://twitter.com/DailyDatabricks/status/156
 :::
 ## {auto-animate="true" background-image="images/columns.jpg" background-size="contain"}
 
+## 9. Performance Testing (NO OP)
+::: {.callout-tip}
+### Intermediate TIP
+:::
 
-## New Databricks Notebook Kernel
+-  Stands for **No Operation**
+-  Simulation of Write Operations: Utilizing write.format("noop") in Spark allows for the simulation of write operations without any actual data being written.
+-  Performance Testing: It aids in performance testing scenarios where the focus is on analyzing the job's performance without the overhead of data write operations.
+-
 
+``` python
+  dataframe.write.format("noop").mode("overwrite").save()
+```
+
+
+## 10. New Databricks Notebook Kernel
+::: {.callout-tip}
+### Intermediate TIP
+:::
+- Ipython based! 
+- Allows for all sorts of funky new solutions such as Ipython Widgets and better interactivity
+- Custom Magics such as %scott
+
+![](images/datetime.png)
+
+
+## 10. Spark Catalog
+::: {.callout-tip}
+### Intermediate TIP
+:::
 - Ipython based! 
 - Allows for all sorts of funky new solutions such as Ipython Widgets and better interactivity
 - Custom Magics such as %scott
