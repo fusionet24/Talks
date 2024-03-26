@@ -1,0 +1,664 @@
+---
+title: "Navigating Data Governance in the Age of Generative AI "
+title-slide-attributes:
+  data-background-image: Speaker_Slidedeck_Aviation_2024.png
+  data-background-size: cover
+  data-background-opacity: "1"
+author: "Scott Bell"
+subtitle: "👨🏻‍💻"
+format:
+  revealjs: 
+    reference-location: document
+    incremental: true
+    #theme: [solarized, custom.scss]
+    theme: solarized
+    slide-number: true
+    smaller: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    highlight-style: dracula
+    code-overflow: wrap
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+
+---
+
+
+## Please Give Your Feedback {background-image="Speaker_Slidedeck_Aviation_2024about-me.png"  }
+![](images/FeedbackQR.svg){.nostretch fig-align="center" width="600px"}
+
+
+::: footer
+
+[https://sqlb.it/?12598](https://sqlb.it/?12598)
+:::
+
+
+## About Scott👨‍💻👨‍🔬📊 {background-image="Speaker_Slidedeck_Aviation_2024about-me.png"  }
+
+::: columns
+::: {.column width="35%"}
+![](images/certs2.png){width="252"}
+:::
+
+::: {.column width="62%"}
+
+-   Fully Remote Contractor Consultant (Currently at [Advancing Analytics]())
+-   Former Avanade Databricks SME & Altius Consultant
+-   Interested in Azure Data Platforms, Intelligent Applications, AI Security, Architecture and Design Patterns
+-   Masters Degree in Computer Science Focusing on Machine Learning
+-   Passionate about Beer🍺 & Rugby League 🏉
+
+:::
+:::
+
+
+
+
+## About DailyDatabricks {background-color="darkred"}
+
+A project that aims todo
+
+-   Provide Small actionable pieces of information
+-   Document the Undocumented
+-   Allow me to Implement **D-R-Y** (Do not repeat yourself) IRL
+
+. . .
+
+<br/> Learn new and wonderful hacks! 🤠
+
+![](images/qr.png){width="300"}
+
+::: footer
+[DailyDatabricks.tips](https://www.dailydatabricks.tips)
+:::
+
+
+
+## Agenda {.smaller auto-animate="false" background-image="Speaker_Slidedeck_Aviation_2024-agenda.png" }
+
+- An Introduction To GEN AI
+
+  
+- Their Impact on Analytics
+
+
+- What should I worry about then?
+
+- Strategy
+- Conclusion
+
+
+::: {.notes}
+- An Introduction To GEN AI
+The Rise of Generative AI: A quick overview of the development and potential of generative AI technologies, including GPT, DALL-E, and generative adversarial networks (GANs).
+
+  - The pace of innovation
+  - Demonstrate the Opportunity/Cost of Gen AI
+  
+- Their Impact on Analytics
+Shifting Paradigms: How generative AI is challenging the established norms in data analytics, from data collection to decision-making.
+  - The Two organisational models
+  - will they take my job?
+
+- What should I worry about then?
+  - The new threats they pose
+  - Security Threats
+  - Lineage Gone Wild
+  - Data Poisoning
+
+- Governance
+Data Strategy Reimagined: Tools and tactics for formulating a forward-thinking data strategy in an age where data can be generated rather than merely analyzed.
+ - Building Solid Foundations
+ - MLOPs Extreme Edition
+ - Data is key
+ - Guide Rails
+ 
+Conclusion
+:::
+
+
+## An Introduction To Generative AI (GEN AI) {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+Generative AI (GEN AI) refers to the subset of artificial intelligence technologies capable of generating new content, data, or information that is coherent and plausible, based on learning from vast datasets, without direct human input.
+
+## Poll Who has used GEN AI? {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+
+## Types of GEN AI{auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- **Text-based Models**: GPT (Generative Pre-trained Transformer), BERT (Bidirectional Encoder Representations from Transformers)
+- **Image Generation Models**: DALL-E (Deep Learning for Language and E-Art), StyleGAN (Style-based Generator Architecture for Generative Adversarial Networks)
+- **Audio & Music Models**: Jukebox, WaveNet
+- **Video Generation Models**: DeepFake technology, First Order Motion Model for Image Animation
+- **Data Synthesis & Augmentation**: Synthetic data generation for training AI models
+
+:::notes
+- **Text-based Models**: Focus on understanding and generating human-like text. GPT is used for tasks such as text completion, CODING! translation, and content creation, while BERT improves search results and understands user queries.
+
+- **Image Generation Models**: Specialize in creating realistic images from textual descriptions. DALL-E generates unique images from text prompts, and StyleGAN produces highly detailed and realistic images, often used in virtual face creation.
+
+- **Audio & Music Models**: Generate music and speech that mimic human production. Jukebox composes music in various styles, and WaveNet produces natural-sounding speech and music.
+
+- **Video Generation Models**: Create or alter video content, enabling animation of still images or creation of realistic video clips. DeepFake technology is known for face swapping in videos, and First Order Motion Model animates portraits realistically.
+
+- **Data Synthesis & Augmentation**: Generates artificial datasets that mimic real data, addressing privacy issues or data scarcity. This is crucial for training models in sensitive areas where real data is limited or sensitive.
+
+As you will see during this talk the multi modal nature of the outputs makes this quite a challenging area to navigate. We have to think about text and Video. Understanding the diverse types of GEN AI is crucial for strategizing data governance in the age of generative AI, ensuring ethical and effective use of these technologies.
+:::
+
+
+## History of Generative AI: From the AI Winter to Present Day {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+![](images/History.png)
+
+
+## History of Generative AI: From the AI Winter to Present Day {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- **Late 1980s to Early 2000s: End of the AI Winter**
+
+
+
+- **2014: GANs (Generative Adversarial Networks)**
+
+
+- **2015: Style Transfer**
+
+
+- **2018: GPT (Generative Pre-trained Transformer) by OpenAI**
+
+
+- **2020: GPT-3 and Beyond**
+
+
+- **2021: DALL-E and CLIP by OpenAI**
+
+
+- **2022-Present: Continued Advancements and Ethical Considerations**
+
+:::notes
+- **Late 1980s to Early 2000s: End of the AI Winter**
+  - The term "AI Winter" refers to periods of reduced funding and interest in artificial intelligence research. The late 1980s saw the end of the last major AI Winter, thanks in part to the adoption of machine learning techniques and the improvement in computer hardware.
+
+- **2006: Renaissance of Deep Learning**
+  - The renaissance of deep learning begins with Geoffrey Hinton and colleagues introducing faster training techniques for deep neural networks. This period marks the resurgence of interest in AI, setting the stage for modern generative models.
+
+- **2014: GANs (Generative Adversarial Networks)**
+  - Ian Goodfellow introduces Generative Adversarial Networks (GANs), revolutionizing the field of generative AI by providing a framework for generating new data instances indistinguishable from real data.
+
+- **2015: Style Transfer**
+  - Researchers demonstrate the capability of AI to apply the style of one image to the content of another, blending art and technology and showcasing the creative potential of generative models.
+
+- **2018: GPT (Generative Pre-trained Transformer) by OpenAI**
+  - OpenAI introduces GPT, a text-based model capable of generating coherent and contextually relevant text based on a given prompt. This marks a significant advancement in natural language processing and generation.
+
+- **2020: GPT-3 and Beyond**
+  - The release of GPT-3 by OpenAI showcases the model's ability to generate human-like text, perform translation, answer questions, and even write simple code, highlighting the versatility and power of modern generative AI.
+
+- **2021: DALL-E and CLIP by OpenAI**
+  - OpenAI introduces DALL-E, a model capable of generating images from textual descriptions, and CLIP, which can understand images in the context of natural language. These models demonstrate significant progress in bridging the gap between visual and textual understanding.
+
+- **2022-Present: Continued Advancements and Ethical Considerations**
+  - The field of generative AI continues to evolve rapidly, with improvements in model efficiency, realism, and creativity. Ethical considerations, including the potential for misuse and the impact on jobs, become increasingly important as these technologies become more integrated into society.
+:::
+
+
+## The pace of innovation: Just this Year{auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- Gemini
+- Google Claim 1 Million Token Context Window
+- Sora
+- Claude 3
+
+::: notes
+
+In February, Google launched "Gemini 1.5" in a limited capacity, positioned as a more powerful and capable model than 1.0 Ultra.[31][32][33] This "step change" was achieved through various technical advancements, including a new architecture, a mixture-of-experts approach, and a larger one-million-token context window, which equates to roughly an hour of silent video, 11 hours of audio, 30,000 lines of code, or 700,000 words
+
+:::
+
+## Briefly How Large Language Models (LLM) Work and Tokenization Explained{auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+- Understanding LLMs:
+  1. **Pre-training**: LLMs undergo an initial training phase, where they learn from a vast dataset of text. This phase allows them to understand language patterns, grammar, context, and even some factual information.
+  2. **Fine-tuning**: Optionally, LLMs can be further trained on a specific dataset to excel in particular tasks or industries, enhancing their relevance and accuracy for specific applications.
+  3. **Generating Text**: Once trained, LLMs can generate text, complete sentences, answer questions, or even create content from scratch. They do this by predicting the next word or sequence of words based on the input they receive.
+
+:::notes
+Large Language Models (LLMs) like GPT (Generative Pre-trained Transformer) are advanced AI systems designed to understand, generate, and interpret human language. Here's a simplified breakdown of how they work and the role of tokenization in their functionality.
+
+The magic of LLMs lies in their ability to understand and generate human-like text. Tokenization breaks down the text into manageable pieces for the model, allowing it to process and analyze language at an unprecedented scale. Through pre-training on diverse text data and optional fine-tuning, LLMs learn to predict text sequences, enabling applications from chatbots to content creation.
+:::
+
+## Briefly How Large Language Models (LLM) Work and Tokenization Explained{auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+![](images/tokenization.png)
+
+  - **Tokenization** is a critical first step in the working of LLMs, involving the conversion of input text into a format that the model can understand—tokens.
+  - **Tokens** can be words, parts of words, or even punctuation. This process allows the model to process and understand the structure and meaning of the text.
+  - **Token Embeddings**: Each token is then converted into a numeric form known as an embedding, which captures not just the token itself but its contextual meaning based on its position and usage in the text.
+  - **Sequence Prediction**: Using these embeddings, the model predicts the likelihood of the next token in a sequence. This prediction is based on the patterns and rules it learned during training.
+
+
+## Demonstrate the Opportunity/Cost of Gen AI {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- "GenAI, too, has the potential to fundamentally transform the global economy and labor force."^[https://www.spglobal.com/en/research-insights/featured/special-editorial/look-forward/can-generative-ai-create-a-productivity-boom#:~:text=Much%20of%20the%20current%20focus,labor%20market%20by%20displacing%20humans.]
+
+- Introduce new roles that have yet to be conceived (like the internet did with SEO) ^[(https://www.spglobal.com/en/research-insights/featured/special-editorial/look-forward/can-generative-ai-create-a-productivity-boom#:~:text=GenAI%20will%20create%20roles%20that%20do%20not%20currently%20exist%20and%2C%20in%20many%20cases%2C%20that%20we%20cannot%20even%20imagine%20%E2%80%94%20as%20has%20happened%20during%20past%20waves%20of%20technology%20adoption.%20The%20role%20of%20search%20engine%20optimization%20specialist%20emerged%20as%20marketing%20moved%20into%20the%20digital%20realm%2C%20as)]
+
+- S&P Global believes that digital transformation will add roughly $7 trillion of additional debt to global capital markets by 2030
+
+- Enhanced Productivity
+- Unlock Innovative New Usecases
+- Competitors will do it you don't!
+
+
+
+
+::: {.notes}
+If you don't attempt todo something in this space in your sector, then someone else will! Not just that, they might not do it as well but the
+
+It is estimated to be worth as an inustry and the potential for transformation. via the models, repurposing workers etc.
+:::
+
+
+
+
+# Shifting Paradigms: How generative AI is challenging the established norms in data analytics, from data collection to decision-making. {  background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+## will they take my job? {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- By 2027, businesses predict that almost half (44%) of workers’ core skills will be disrupted.^[https://www.weforum.org/agenda/2024/02/work-and-workplace-trends-to-watch-2024/]
+
+
+- "Generative AI can improve a highly skilled worker’s performance by as much as 40% compared with workers who don’t use it."^[https://mitsloan.mit.edu/ideas-made-to-matter/how-generative-ai-can-boost-highly-skilled-workers-productivity]
+
+- There is no Silver Bullet^[https://en.wikipedia.org/wiki/No_Silver_Bullet#Brooks1986] 
+
+::: {.notes}
+
+
+Almost three-quarters (73%) of chief economists surveyed "do not foresee a net positive impact on employment in low-income economies". https://www.weforum.org/agenda/2024/02/work-and-workplace-trends-to-watch-2024/ 
+
+Fred Brooks in 1986.[1] Brooks argues that "there is no single development, in either technology or management technique, which by itself promises even one order of magnitude [tenfold] improvement within a decade in productivity, in reliability, in simplicity." 
+:::
+
+## Two organisational adoption models {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+- **Copilots** (Augmentation):
+
+   This model focuses on enhancing human productivity and creativity. LLMs serve as intelligent assistants, offering suggestions, generating ideas, and automating repetitive tasks, enabling humans to focus on higher-value work.
+
+- **AI Workers **(Replacement):
+  
+  In this model, LLMs take over tasks or roles previously performed by humans, potentially leading to job displacement in certain sectors.
+
+
+
+::: aside
+[Pragmatic Engineer AI developer article](https://blog.pragmaticengineer.com/the-ai-developer/) &
+[Klarna Press Release](https://www.klarna.com/international/press/klarna-ai-assistant-handles-two-thirds-of-customer-service-chats-in-its-first-month/)
+:::
+
+::: {.notes}
+
+
+Copilots or Human Centric Approaches focus on increasing productivity and helps to mitigate some of the risks we will be discussing in the later sections. It allows via intelligent assisrants to build generative content
+
+
+AI workers take over or replace humans which could lead to job displacement.
+
+ Klarna announced its AI assistant powered by OpenAI In february. after being live globally for 1 month, the stats were pretty impressive.
+
+    The AI assistant has had 2.3 million conversations, two-thirds of Klarna’s customer service chats
+    It is doing the equivalent work of 700 full-time agents
+35 languages
+
+ I don't think we are anywhere near in the Data Space any meaningful replacement of developers.
+
+Magic.dev raising $100M in funding from Nat Friedman (CEO of GitHub from 2018-2021,). It was buidling a superhuman software engineer. Yet we saw no product or demo.
+
+Cognition Labs producing a video demo about its product “Devin,” which it calls “the first AI software engineer”
+
+Press reports say Devin is ready to do the job of developers, but even Cognition AI admits that the tool only solved about 1 in 7 GitHub issues unassisted in tests. That’s impressive, but there’s a very long way to go!
+
+
+Geregly claims it's all smoke and mirrors as AI dev tool startups need outlandish claims to grab attention.  Because Microsoft has backed them into a corner.
+
+:::
+
+## Shifting Paradigms {  background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+![](images/maturity.png)
+
+## Their Impact on Analytics: Opportunities {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+"By 2030, the number of global digital jobs is expected to rise to around 92 million."^[https://www.weforum.org/agenda/2024/02/work-and-workplace-trends-to-watch-2024/]
+
+  1. **Enhanced Decision-Making**: GEN AI can process and analyze vast unstructured datasets more efficiently than traditional methods, providing insights, thereby supporting better strategic decisions.
+  2. **Automation of Routine Tasks**: Automates data preparation and analysis, freeing up human analysts for more complex and strategic tasks that require human judgment.
+  3. **Innovation in Product and Service Development**: By Identifying new usecases that require unstructured data, you can unlock new tooling and products for Users & Customers (e.g. Code Agents).
+  4. **Personalized Customer Experiences**: GEN AI's ability to analyze customer data in real-time allows for highly personalized customer interactions and services, enhancing satisfaction and loyalty.
+  5. **Cost Reduction**: Over time, the use of GEN AI in analytics can lead to significant cost savings by optimizing processes, reducing errors, and minimizing manual labor.
+
+
+## Their Impact on Analytics :Costs {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+  1. **Implementation and Training Costs**: The initial setup, including the acquisition of technology and training of staff, can be substantial.
+  2. **Data Privacy and Security Risks**: Handling vast amounts of data with GEN AI raises concerns about data privacy and security, requiring robust measures and potentially incurring additional costs.
+  3. **Skill Gap**: The effective use of GEN AI requires specialized skills. Organizations may face challenges in finding and retaining talent.
+  4. **Dependence on Data Quality**: The accuracy of GEN AI's outputs is heavily dependent on the quality of the input data. Ensuring high-quality data can involve significant effort and resources.
+  5. **Ethical and Regulatory Considerations**: Organizations must navigate the ethical implications of using GEN AI in analytics and adhere to an evolving regulatory landscape, which can introduce complexity and compliance costs.
+
+
+## Some of the Anaytics Changes coming {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+- Vector Databases
+- Semantic Model Interrogation
+- Renewed focus on unstructured data
+- Code Agents
+
+# What should I worry about then? {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+## What should I worry about then? AI Threat Map {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+![](images/Threats Grid.png)
+
+
+## The new threats they pose {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- Emerging Threats:
+  1. **Deepfakes and Misinformation**: GEN AI can create realistic videos, images, and audio recordings, posing significant risks in spreading misinformation.
+  2. **Automated Hacking Attempts**: GEN AI can be used to automate and enhance hacking efforts, identifying vulnerabilities and executing complex attacks at a scale and speed unachievable by humans.
+  3. **Data Privacy Breaches**: The capability of GEN AI to synthesize realistic personal data can lead to new forms of identity theft and privacy violations, complicating compliance with data protection regulations.
+  4. **Bias and Discrimination**: GEN AI systems, trained on biased data, can perpetuate or even amplify biases, leading to discriminatory practices and decisions within organizations.
+  5. **Intellectual Property Theft**: GEN AI's ability to replicate and innovate based on existing data can blur the lines of intellectual property rights, leading to legal and ethical dilemmas.
+  
+
+## What should I worry about then? {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+Focusing on Poor Data Governance Specfically in GEN AI:
+
+- Plagirimism risks
+- Data Privacy Breaches
+- Data Exfiltration
+- Bias
+- New Cyber Security Risks
+- Hallucinations
+
+
+::: notes
+
+
+
+:::
+
+
+# Lineage Gonewild {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+## Hallucinations in Generative AI {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+"Generative AI (GEN AI) refers to the subset of artificial intelligence technologies capable of generating new content, data, or information that is **coherent and plausible**, based on learning from vast datasets, without direct human input."
+
+
+
+- Hallucinations in Generative AI refer to instances where AI models generate false or misleading information, often with a high degree of confidence.
+- Can arise from biases in training data, overfitting, or limitations in the model's understanding of context and reality.
+- Hallucinations can compromise the reliability and credibility of AI-generated content, leading to misinformation and decision-making based on inaccurate data.
+
+::: notes 
+
+mY EXAMPLE FOR SQL
+
+
+:::
+
+
+## Hallucinations in Generative AI {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+![](images/halluinations.png)^[https://arstechnica.com/tech-policy/2024/01/openai-must-defend-chatgpt-fabrications-after-failing-to-defeat-libel-suit/]
+
+
+
+
+## Plagiarism & Copyright Infringement {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- LLMs are trained on a large corpus of data of everything that already exists. 
+- So by design it is always plagiarising by taking related tokens and concepts that are mixed together
+- Humans do this too, but they can reason what is plagiarism
+- You can use Generative AI to intentional or accidentally plagiarise
+
+
+## Lineage Gone Wild {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+![](images/NYT example.png)
+
+
+:::footer:::
+[Source (Page 30)](https://nytco-assets.nytimes.com/2023/12/NYT_Complaint_Dec2023.pdf)
+
+
+:::
+
+## Lineage Gone Wild {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+
+![](images/CP30.jpg)
+
+:::footer:::
+
+[Source](https://x.com/GaryMarcus/status/1740834294803902807?s=20)
+
+
+:::
+
+## Lineage Gone Wild {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+
+:::: {.columns}
+::: {.column width="50%"}
+![](images/golden-droid.jpg)
+
+
+:::
+::: {.column width="50%"}
+
+![](images/animated-sponge.jpg)
+
+::: 
+::::
+
+
+
+:::footer:::
+
+[Source](https://x.com/GaryMarcus/status/1740834294803902807?s=20)
+
+
+:::
+
+## Data Poisoning {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- The intentional (or unintentional) manipulation of training data
+- Introduce bias into the model
+- Manipulate model predictions
+- A lot of datasets used in large models are uncurated
+
+- In "Poisoning Web-Scale Training Datasets is Practical" ^[https://arxiv.org/pdf/2302.10149.pdf] the researchers posioned 0.01% of some of the most popular training datasets for $60
+
+
+
+::: notes
+
+Briefly define data poisoning as the intentional or unintentional manipulation of training data for Large Language Models (LLMs).
+data poisoning can lead to biases in LLM outputs and responses.
+adversaries can inject specific examples to manipulate model predictions.
+
+
+Emphasize the scale at which AI training datasets have grown, making manual curation infeasible Vulnerability to Poisoning: Despite resilience to random noise, even small amounts of adversarial noise can cause targeted errors, highlighting the practicality of poisoning attacks in the absence of human curation.
+
+
+In February 2023, Researches demonstrated two novel approaches in a paper called “Poisoning Web-Scale Training Datasets is Practical”
+
+Real-World Attack Feasibility: Introduces two novel poisoning attacks targeting web-scale datasets, exploiting the current dataset's trust assumptions and structural weaknesses.S
+plit-view Data Poisoning: Exploits the difference in data seen by curators and end-users due to the absence of integrity protections.
+Frontrunning Data Poisoning: Utilizes predictable snapshot schedules and moderation latency to ensure malicious content's inclusion in datasets. These datasets aare uncurated, so by design it will take time for detection,alerting and resolution of malicious data poisoning. Currently they’re 
+Attack Demonstrations: Feasibility shown on 10 popular web-scale datasets, with practical and low-cost methods (e.g., $60 to poison 0.01% of a dataset).
+
+
+:::
+
+
+## Lineage Gone Wild {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+1. **Reputational Damage**: Organizations risk making decisions or publishing insights based on inaccurate or manipulated data, leading to public mistrust and harm to their reputation.
+2. **Accidental Plagiarism**: Without clear data lineage, content generated by AI may inadvertently replicate copyrighted material, leading to legal issues and credibility loss.
+3. **Propagation of Hallucinations**: Generative AI models, can produce "hallucinated" data—information that is fabricated or inaccurately generated. Without proper lineage tracking, these errors can spread undetected throughout an organization's data ecosystem, compounding inaccuracies.
+4. **Compromised Decision-Making**: Decisions made on the basis of flawed data can lead to strategic missteps, financial losses, and a degradation of trust within and outside the organization.
+
+:::notes
+The chaos of "Lineage Gone Wild" underscores the critical need for robust data governance practices, emphasizing the tracking of data from its source through its lifecycle. Implementing comprehensive data lineage tools and protocols not only mitigates the risks of reputational damage, accidental plagiarism, and the propagation of inaccuracies but also safeguards against security vulnerabilities, ensuring the integrity and trustworthiness of organizational data assets.
+:::
+
+
+## Understanding Data Exfiltration Risks {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+
+- **Data Exfiltration**: The unauthorized transfer of data from a system, posing significant security risks in chat-based AI platforms like Chat GPT.
+- **Attack Vectors**: Phishing attacks, malicious prompts, or exploitation of vulnerabilities within the AI system can serve as avenues for data exfiltration.
+- **Sensitive Data at Risk**: Personal information, proprietary business information, and other sensitive data inputs can be targeted for extraction.
+
+:::notes
+Data exfiltration in Chat GPT environments highlights the vulnerabilities that exist within interactive AI systems, where unauthorized actors exploit weaknesses to extract sensitive information. This could occur through phishing attacks aimed at users, malicious prompts designed to trick the AI into revealing information, or directly exploiting system vulnerabilities. The implications are significant, potentially exposing personal and proprietary information to unauthorized parties. Awareness and robust security measures are critical in mitigating these risks.
+:::
+
+## Data Exfiltration {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+![](images/bingchat-exfil.png)^[https://embracethered.com/blog/posts/2023/bing-chat-data-exfiltration-poc-and-fix/]
+
+
+
+## Data Exfiltration {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+![](images/Unicode-Sneaker.png)^[https://embracethered.com/blog/posts/2024/hiding-and-finding-text-with-unicode-tags/]
+
+::: notes
+
+ASCII to unicode smuggler
+:::
+
+## Prompt Exfiltration {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+ 
+
+![](images/prompt-exfiltration.png) ^[https://chat.openai.com/share/de610029-98ec-4fba-80b8-600d4e3db9da]
+
+
+#  {auto-animate="true" background-image="images/path.jpg"}
+
+::: footer
+[Source](https://twitter.com/SarahNicholas/status/1401510907604353024/photo/1)
+:::
+
+::: notes
+
+So that's some of the fun new risks, there are tons more I'd love to cover but we don't have the time sadly!
+
+I love this picture, I think it illustrates what failed data goverance looks like in the real world!. Gen AI or not!
+
+What LLMs, Copilots and Chat Bots have done is democractise data and AI. It's expanded the need for goverance to be bought into by everyone. Everyone is suddenly a prompt engineer and everyone could take the shortcut...
+
+You need a strategy and that boils down to Do you understand where accountability and responsibility for AI/ML Data Goverance sit in your organisation? Why would it be any different to data goverance?
+
+I’m not saying you have to be the most innovative or cutting edge practioner here. You just need to have considered it, planned for what you can and made sensible decisions.
+
+With GEN AI as we've discussed You’re going to significantly increase peoples productivity but with that comes an increase in peoples potential for destructivity. 
+
+
+:::
+
+# Data Governance {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png"}
+
+Refers to the comprehensive framework of practices, policies, standards, and procedures that an organization implements to manage its data assets. This framework ensures that data across the organization is **accurate**, **available**, **secure**, and used in compliance with **regulations** and internal policies. 
+
+
+
+
+
+
+# Data Governance {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png"}
+- Key Components:
+   1. **Data Quality**: Ensuring the accuracy, consistency, and reliability of data throughout its lifecycle.
+   2. **Data Security**: Protecting data from unauthorized access, breaches, and theft through robust security measures.
+   3. **Data Privacy**: Managing data in compliance with privacy laws (like GDPR, CCPA) and ethical standards, including how data is collected, stored, and shared.
+   4. **Data Lifecycle Management**: Overseeing the flow of data from creation and acquisition through to archiving and deletion, ensuring it is managed appropriately at each stage.
+   5. **Regulatory Compliance**: Adhering to relevant industry and government regulations concerning data handling and reporting.
+   6. **Data Architecture and Integration**: Structuring data architecture for optimal access, analysis, and integration across systems.
+   7. **Metadata Management**: Keeping a record of data that provides information about other data, making it easier to understand, use, and manage.
+
+
+# Extending it to GEN AI  {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png"}
+
+![](images/Strategy Breakdown.png)
+
+
+## Engineering Best Practices  {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png"}
+- Take Snapshots and Version your Training Datasets
+- Treat Prompts as Data Artefacts
+- Do your usual MLOPS work
+- Threat Model your code for data risks
+- Ensure you have embedded observability
+- Version your Models
+
+## Data is key {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+- Get the Data Part right first!
+- The rest will follow!
+
+
+
+## What about GDPR rights? {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+- Ensure your existing processes consider GDPR rights
+- Now you have models that are hard to understand, can invent fictional outputs.... How do you balance that with the Transparency and Fairness?
+- Develop a framework to ensure that appropriate risks are mitigated such as  Right to Object.
+
+
+## So what do Guide Rails look like? {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+![](images/compontentmap.png)
+
+
+
+## Useful Resources for Modeling {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- [GEN AI Data Goverance Examples](#)
+- [NCSC Strategy Considerations](https://www.ncsc.gov.uk/guidance/ai-and-cyber-security-what-you-need-to-know)
+- [NCSC Principals for Security of Machine Learning](https://www.ncsc.gov.uk/collection/machine-learning)
+- [LLM AI Cybersecurity & Governance Checklist ](https://owasp.org/www-project-top-10-for-large-language-model-applications/llm-top-10-governance-doc/LLM_AI_Security_and_Governance_Checklist-v1.pdf)
+- [STRIDE](https://blog.securityinnovation.com/threat-modeling-for-large-language-models)
+- [Microsoft Failure Modes in Machine Learning](https://learn.microsoft.com/en-us/security/engineering/failure-modes-in-machine-learning)
+
+
+## Conclusion {auto-animate="true" background-image="Speaker_Slidedeck_Aviation_2024-generic.png" }
+
+- New Threats and Artefacts now exist, you need guiderails in place
+- Strategy Is Key, you need Accountablity and Lineage
+- No longer can you ignore Unstructured Data (if you're)
+- Get the Data bits right first and the rest will follow
+
+
+## Thanks for Listening  {background-image="Speaker_Slidedeck_Aviation_2024about-me.png"  }
+![](images/FeedbackQR.svg){.nostretch fig-align="center" width="600px"}
+
+
+::: footer
+
+[https://sqlb.it/?12598](https://sqlb.it/?12598)
+:::
