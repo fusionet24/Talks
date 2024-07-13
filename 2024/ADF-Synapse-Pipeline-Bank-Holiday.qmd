@@ -1,0 +1,1151 @@
+---
+title: "Handling Bank Holidays in Synapse Pipelines"
+subtitle: "or ADF and Fabric"
+format:
+  revealjs: 
+    theme: blood
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    footer: <https://www.myyearindata.com/posts/handling-uk-bank-holidays-in-adf-pipelines/>
+    highlight-style: dracula
+    code-overflow: wrap
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    smaller: true
+    scrollable: true
+
+---
+## About Scott👨‍💻👨‍🔬📊 
+
+::: columns
+::: {.column width="35%"}
+![](images/certs2.png){width="252"}
+:::
+
+::: {.column width="62%"}
+
+-   Fully Remote Contractor Consultant
+-   Former Avanade Databricks SME & Altius Consultant
+-   Interested in Azure Data Platforms, Intelligent Applications, AI Security, Architecture and Design Patterns
+-   Masters Degree in Computer Science Focusing on Machine Learning
+-   Passionate about Beer🍺 & Rugby League 🏉
+- Run [DailyDatabricks.tips](https://www.dailydatabricks.tips)
+
+:::
+:::
+
+
+## Some Context:
+
+- **Synapse Pipelines:** Used to automate data movement and transformation.
+- **Bank Holidays:** Predefined dates public holidays when banks and financial institutions are closed.
+
+## Why Handle Bank Holidays?
+- Bank holidays affect data processing schedules.
+- Data may not be available on Bank Holidays.
+- Ensuring pipelines do not run on these holidays prevents unnecessary resource usage and potential data issues.
+
+**Current Limitation**: Synapse Pipeline triggers do not natively recognize bank holidays.
+
+
+:::footer
+Reference Blog: [Handling UK Bank Holidays in ADF Pipelines](https://www.myyearindata.com/posts/handling-uk-bank-holidays-in-adf-pipelines/)
+:::
+
+
+## Types of Triggers in Azure Synapse Analytics
+
+- **Schedule Triggers:**
+  - Execute pipelines on a fixed schedule.
+  - Ideal for routine batch jobs like daily data loads.
+  
+- **Tumbling Window Triggers:**
+  - Execute pipelines based on non-overlapping, repeating time intervals.
+  - Suitable for incremental data processing and aggregation tasks.
+  
+- **Event Triggers:**
+  - Initiate pipelines in response to data events, such as file uploads.
+  - Perfect for real-time data processing needs.
+
+
+## Solution Options
+1. Use an External System to Execute Synapse via the API (with something like a Azure Function)
+2. Drop Blank files on Bank Holidays
+3. Trigger Custom Events into ADF. You can invoke Custom Event Triggers via Event Grid or Invoke Pipelines via an external orchstrator
+4. Trigger Every Day or Week Day and check if the day is a bank holiday. 
+
+
+## Steps to Handle Bank Holidays
+1. **Fetch Bank Holidays**
+   - Use an API or static file to get a list of bank holidays.
+   - Example API: gov.uk API for UK bank holidays.
+
+2. **(Optional) Store Bank Holidays**
+   - Save the bank holiday data in a storage solution accessible by ADF/Synapse.
+3. **Pipeline Logic**
+   - Implement logic to check if the current date is a bank holiday.
+   - Conditional activities in ADF to skip processing on bank holidays.
+
+## Fetching Bank Holidays
+```python
+import requests
+import json
+
+# Example code to fetch UK bank holidays
+url = 'https://www.gov.uk/bank-holidays.json'
+response = requests.get(url)
+bank_holidays = response.json()
+
+print(json.dumps(bank_holidays, indent=4))
+```
+
+## Fetching Bank Holidays
+
+```json
+            {
+                "title": "Boxing Day",
+                "date": "2018-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2019-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "2nd January",
+                "date": "2019-01-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2019-04-19",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2019-05-06",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2019-05-27",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2019-08-05",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Andrew\u2019s Day",
+                "date": "2019-12-02",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2019-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2019-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2020-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "2nd January",
+                "date": "2020-01-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2020-04-10",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday (VE day)",
+                "date": "2020-05-08",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2020-05-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2020-08-03",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Andrew\u2019s Day",
+                "date": "2020-11-30",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2020-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2020-12-28",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2021-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "2nd January",
+                "date": "2021-01-04",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2021-04-02",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2021-05-03",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2021-05-31",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2021-08-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Andrew\u2019s Day",
+                "date": "2021-11-30",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2021-12-27",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2021-12-28",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2022-01-03",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "2nd January",
+                "date": "2022-01-04",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2022-04-15",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2022-05-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2022-06-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Platinum Jubilee bank holiday",
+                "date": "2022-06-03",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2022-08-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Bank Holiday for the State Funeral of Queen Elizabeth II",
+                "date": "2022-09-19",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "St Andrew\u2019s Day",
+                "date": "2022-11-30",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2022-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2022-12-27",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2023-01-02",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "2nd January",
+                "date": "2023-01-03",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2023-04-07",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2023-05-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Bank holiday for the coronation of King Charles III",
+                "date": "2023-05-08",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2023-05-29",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2023-08-07",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Andrew\u2019s Day",
+                "date": "2023-11-30",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2023-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2023-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2024-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "2nd January",
+                "date": "2024-01-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2024-03-29",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2024-05-06",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2024-05-27",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2024-08-05",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Andrew\u2019s Day",
+                "date": "2024-12-02",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2024-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2024-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2025-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "2nd January",
+                "date": "2025-01-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2025-04-18",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2025-05-05",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2025-05-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2025-08-04",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Andrew\u2019s Day",
+                "date": "2025-12-01",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2025-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2025-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2026-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "2nd January",
+                "date": "2026-01-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2026-04-03",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2026-05-04",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2026-05-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2026-08-03",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Andrew\u2019s Day",
+                "date": "2026-11-30",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2026-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2026-12-28",
+                "notes": "Substitute day",
+                "bunting": true
+            }
+        ]
+    },
+    "northern-ireland": {
+        "division": "northern-ireland",
+        "events": [
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2018-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2018-03-19",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2018-03-30",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2018-04-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2018-05-07",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2018-05-28",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2018-07-12",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2018-08-27",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2018-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2018-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2019-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2019-03-18",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2019-04-19",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2019-04-22",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2019-05-06",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2019-05-27",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2019-07-12",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2019-08-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2019-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2019-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2020-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2020-03-17",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2020-04-10",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2020-04-13",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Early May bank holiday (VE day)",
+                "date": "2020-05-08",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2020-05-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2020-07-13",
+                "notes": "Substitute day",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2020-08-31",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2020-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2020-12-28",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2021-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2021-03-17",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2021-04-02",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2021-04-05",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2021-05-03",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2021-05-31",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2021-07-12",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2021-08-30",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2021-12-27",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2021-12-28",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2022-01-03",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2022-03-17",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2022-04-15",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2022-04-18",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2022-05-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2022-06-02",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Platinum Jubilee bank holiday",
+                "date": "2022-06-03",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2022-07-12",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2022-08-29",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Bank Holiday for the State Funeral of Queen Elizabeth II",
+                "date": "2022-09-19",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2022-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2022-12-27",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2023-01-02",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2023-03-17",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2023-04-07",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2023-04-10",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2023-05-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Bank holiday for the coronation of King Charles III",
+                "date": "2023-05-08",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2023-05-29",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2023-07-12",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2023-08-28",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2023-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2023-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2024-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2024-03-18",
+                "notes": "Substitute day",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2024-03-29",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2024-04-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2024-05-06",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2024-05-27",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2024-07-12",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2024-08-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2024-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2024-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2025-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2025-03-17",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2025-04-18",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2025-04-21",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2025-05-05",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2025-05-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2025-07-14",
+                "notes": "Substitute day",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2025-08-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2025-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2025-12-26",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "New Year\u2019s Day",
+                "date": "2026-01-01",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "St Patrick\u2019s Day",
+                "date": "2026-03-17",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Good Friday",
+                "date": "2026-04-03",
+                "notes": "",
+                "bunting": false
+            },
+            {
+                "title": "Easter Monday",
+                "date": "2026-04-06",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Early May bank holiday",
+                "date": "2026-05-04",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Spring bank holiday",
+                "date": "2026-05-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Battle of the Boyne (Orangemen\u2019s Day)",
+                "date": "2026-07-13",
+                "notes": "Substitute day",
+                "bunting": false
+            },
+            {
+                "title": "Summer bank holiday",
+                "date": "2026-08-31",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Christmas Day",
+                "date": "2026-12-25",
+                "notes": "",
+                "bunting": true
+            },
+            {
+                "title": "Boxing Day",
+                "date": "2026-12-28",
+                "notes": "Substitute day",
+                "bunting": true
+            }
+        ]
+    }
+}
+
+```
+
+
+## What about other Calendars
+
+- [(Free)Use the Google Calendar API](https://stackoverflow.com/questions/30833844/get-holidays-list-of-a-country-from-google-calendar-api)
+- [(Free) Azure Open Datasets on Public Holidays](https://learn.microsoft.com/en-us/azure/open-datasets/dataset-public-holidays?tabs=pyspark)
+- [(Paid) Holiday API from Time And Date](https://dev.timeanddate.com/docs/holidays/)
+- [(Paid) 230 countries API](https://api-ninjas.com/api/holidays)
+
+## Pipeline Logic in ADF
+![](images/logic.png)
+
+- Get the bank holidays in Synapse pipelines.
+- If Condition activity to check dates.
+
+## Demo Time
+- Now let's see a demo of this in Synapse
+
+
+# Thank You!
+- Visit the blog for more details: [Handling UK Bank Holidays in ADF Pipelines](https://www.myyearindata.com/posts/handling-uk-bank-holidays-in-adf-pipelines/)

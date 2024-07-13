@@ -1,0 +1,361 @@
+---
+title: "10 Things"
+subtitle: "you (probably) should know about Databricks"
+format:
+  revealjs: 
+    theme: blood
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/logo.jpg
+    footer: <https://dailydatabricks.tips>
+    highlight-style: dracula
+    code-overflow: wrap
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    multiplex: 
+      id: '5f0a5ee9861f50a4'
+      secret: '166083769571176296'
+    smaller: true
+    scrollable: true
+
+---
+
+
+## About DailyDatabricks {background-color="darkred"}
+
+A project that aims todo
+
+-   Provide Small actionable pieces of information
+-   Document the Undocumented
+-   Allow me to Implement **D-R-Y** (Do not repeat yourself) IRL
+
+. . .
+
+<br/> Learn new and wonderful hacks! 🤠
+
+::: footer
+Learn more: [Daily Databricks](https://quarto.org/docs/presentations/revealjs/#incremental-lists)
+:::
+
+# Tips
+
+## 1. Notebook Context {auto-animate="true" }
+::: {.callout-tip title="Beginner TIP" appearance="simple"}
+:::
+-   Get Metadata & Context on your current notebook environment
+-   User Credentials (email, IPs, @azuread
+ object ids)
+- Browser details & language
+- Cluster Ids
+
+``` {.python code-line-numbers="0|1|3-5|7-8" code-overflow="wrap"}
+dbutils.notebook.entry_point.getDbutils().notebook().getContext()
+
+dbutils.notebook.entry_point.getDbutils().notebook().getContext() \
+  .notebookPath() \
+  .toString() 
+
+import json
+json.loads(dbutils.notebook.entry_point.getDbutils().notebook().getContext().toJson())
+```
+
+::: footer
+Learn more: [Twitter Thread](https://twitter.com/DailyDatabricks/status/1536723212884656128/)
+:::
+
+
+
+## 1. Properties
+
+``` {.json code-line-numbers="0|13|29|34|53|53-54" code-overflow="wrap"}
+{'rootRunId': None,
+ 'currentRunId': None,
+ 'jobGroup': '3390617077668218965_7460294295175766547_89e1d0119f914af39bafdb017336882e',
+ 'tags': {'opId': 'ServerBackend-54787e706ebf268a',
+  'shardName': 'az-eastus-c3',
+  'opTarget': 'com.databricks.backend.common.rpc.InternalDriverBackendMessages$StartRepl',
+  'clusterMemory': '8192',
+  'serverBackendName': 'com.databricks.backend.daemon.driver.DriverCorral',
+  'notebookId': '2048538015852092',
+  'projectName': 'driver',
+  'tier': 'tier-multitenant',
+  'eventWindowTime': '2254196.899999991',
+  'httpTarget': '/notebook/2048538015852092/command/3362446343388373',
+  'commandRunId': 'dddd47ee-68fe-4fd2-9042-fbde8fd28a8e',
+  'buildHash': '',
+  'workspaceRoutingTarget': 'null',
+  'browserHash': '#notebook/2048538015852092/command/3362446343388373',
+  'host': '10.139.64.4',
+  'browserPathName': '/',
+  'notebookLanguage': 'sql',
+  'workspaceRoutingBucket': 'null',
+  'sparkVersion': '12.1.x-scala2.12',
+  'hostName': 'cons-webapp-0',
+  'httpMethod': 'POST',
+  'browserIdleTime': '411',
+  'jettyRpcJettyVersion': '9',
+  'browserLanguage': 'en-GB',
+  'browserTabId': '99fc6c79-18df-4ff9-b0e7-35df3da8bc08',
+  'sourceIpAddress': '<AN_IP>',
+  'loadedUiVersions': 'Map(monolith -> f03dcdb1e979dfefcf2f878284c318bd21970a5d)',
+  'browserUserAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+  'orgId': '2675080094955785',
+  'userAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+  'clusterId': '0120-154009-7bof0jyo',
+  'serverEventId': 'CgwIusXzngYQ9+mEqAIQgAQYiQE6EKeKn3/v7UOlvUQlALPm2wI=',
+  'rootOpId': 'ServiceMain-8ef19d61f07f0002',
+  'requestIdWasMissing': 'true',
+  'sessionId': 'd9be357a4121697a1de52d1c3b447874315900e2b5a5054b8aa92576f1e865be',
+  'clusterCreator': 'me@hotmail.com',
+  'originatedFromEnvoy': 'true',
+  'clientBranchName': 'webapp_2023-01-27_23.45.48Z_master_b5b81920_1040710074',
+  'clientTimestamp': '1675421567053',
+  'clusterType': 'spot',
+  'requestId': 'CgwIusXzngYQ4/r7pwIQgAQYiQE6EKeKn3/v7UOlvUQlALPm2wI=',
+  'browserHasFocus': 'true',
+  'userId': '8925728005363108',
+  'browserIsHidden': 'false',
+  'principalIdpId': 'd7eb5413-6c62-4fdc-9681-2a44ac84ad9c',
+  'clientLocale': 'en',
+  'branchName': 'webapp_2023-01-27_23.45.48Z_master_b5b81920_1040710074',
+  'opType': 'ServerBackend',
+  'sourcePortNumber': '0',
+  'user': 'me@hotmail.com',
+  'principalIdpObjectId': 'd3b267b3-1bb4-435e-8c8f-7d667872153d',
+  'browserHostName': 'adb-2675080094955785.5.azuredatabricks.net',
+  'parentOpId': 'RPCClient-8ef19d61f07f11ae',
+  'jettyRpcType': 'InternalDriverBackendMessages$DriverBackendRequest'},
+ 'extraContext': {'allowStdin': 'true',
+  'non_uc_api_token': '',
+  'commandResultJsonMaxBytes': '20971520',
+  'notebook_path': '/sqlsdamples',
+  'thresholdForStoringInDbfs': '10000',
+  'enableStoringResultsInDbfs': 'true',
+  'api_url': 'https://eastus-c3.azuredatabricks.net',
+  'aclPathOfAclRoot': '/workspace/2048538015852092',
+  'api_token': '[REDACTED]'},
+ 'credentialKeys': ['adls_aad_token',
+  'adls_gen2_aad_token',
+  'synapse_aad_token']}
+  ```
+
+
+
+## 2. Describe Stuff {auto-animate="true"}
+::: {.callout-tip title="Beginner TIP" appearance="simple"}
+:::
+- You can Describe tables and get various properties
+
+::: incremental
+- `Describe table` gives you Schema Level Information
+- `Show Create Table` helps you recreate tables
+- `Describe Table Extended` allows you schema + partitioning + catalog metadata. Can be run at a partion level
+- `Describe Detail` gives you detailed table data and partitioning too.
+:::
+
+::: footer
+Learn more: [Describe](https://docs.databricks.com/en/sql/language-manual/sql-ref-syntax-aux-describe-table.htm)
+:::
+
+
+
+## {auto-animate="true" background-image="images/table_extended.png" background-size="contain"}
+
+
+## 2. Describe Stuff {auto-animate="true"}
+
+Every needed to retrieve the partition columns of a table at run time?
+
+You can with something like this
+
+```python
+spark.sql("describe detail <db_here>.<your_table>").select("partitionColumns")
+```
+
+
+
+
+## Configiruation Objects
+
+Spark configurations for customisation, optimisations etc can be set at a Cluster Level or at session Level.
+
+
+## 3. Spark Config
+::: {.callout-tip title="Intermediate TIP" appearance="simple"}
+
+:::
+
+Setting configurations at a session level allows customisations for specific workloads. 
+
+Get a Property
+``` python
+spark.conf.get("spark.<name-of-property>")
+
+```
+
+Get all Properties
+``` python
+sc.getConf().getAll() 
+```
+
+Set a property
+
+``` python
+spark.conf.set("spark.sql.<name-of-property>", <value>)
+```
+
+
+
+## 4. Spark Config  Max Result Size
+::: {.callout-tip title="Intermediate TIP" appearance="simple"}
+
+:::
+
+Have you hit spark result size exceptions when using collect() or toPandas(), or writing large files from the driver nodes?
+
+You can modify the Maximum Result Size of your Driver Node. `spark.driver.maxResultSize <X>g`
+
+Doing this should be generally be avoided ‼️ 
+
+
+
+::: footer
+Learn more: [Max Result Size](
+https://kb.databricks.com/jobs/job-fails-maxresultsize-exception)
+:::
+
+
+## 5. Use the Databricks Managed Identity
+::: {.callout-tip title="Advanced TIP" appearance="simple"}
+:::
+
+
+Every Databricks workspace has a secret Managed Identity inside of it's `Managed Resource Group` called `dbmanagedidentity`
+
+You can use this to authenticate with without a a client id or client secret
+
+**This is not an offically recommended databricks solution**
+
+``` {.python code-line-numbers="0|1-4|5-9" code-overflow="wrap"}
+from azure.identity import ChainedTokenCredential,ManagedIdentityCredential
+MSI_credential = ManagedIdentityCredential()
+credential_chain = ChainedTokenCredential(MSI_credential)
+
+from azure.keyvault.secrets import SecretClient
+client = SecretClient(vault_url="https://NOTTHATTOPSECRET.vault.azure.net/", credential=MSI_credential)
+client.get_secret("dewwe")
+
+
+```
+
+
+## 6. Spark Catalog
+::: {.callout-tip title="Advanced TIP" appearance="simple"}
+:::
+The Spark catalog is a metadata repository in Apache Spark that stores information about tables, databases, and their associated schemas, allowing users to manage and query structured data efficiently.
+
+
+``` {.python code-line-numbers="0|1|3|5|7" code-overflow="wrap"}
+spark.catalog.currentCatalog()
+
+spark.catalog.listDatabases()
+
+spark.catalog.listTables("<MY_DATABASE_>")
+
+spark.catalog.listColumns("<My_TABLE>")
+
+```
+
+
+## 7. NEW: Variant Data Type in Databricks
+A flexible data type that can hold semi structured data in a column. *Databricks recommends using VARIANT over JSON strings.*
+
+Benefits include improved read and write speeds and better schema evolution when using Structs and arrays to parse the data.
+
+``` {.sql  code-overflow="wrap"}
+CREATE TABLE table_name (variant_column VARIANT)
+
+ALTER TABLE table_name SET TBLPROPERTIES('delta.feature.variantType-preview' = 'supported')
+
+
+```
+
+
+
+
+
+## 8. Delta Defaults {auto-animate="true"}
+::: {.callout-tip title="Intermediate TIP" appearance="simple"}
+
+:::
+
+- You can configure defaults for delta tables created within your session!
+- Helpful to ensure all tables created within linked notebooks/processes share the same config!
+
+Achieved this way **spark.databricks.delta.properties.defaults.<conf>**
+
+``` sql
+
+SET spark.databricks.delta.properties.defaults.appendOnly = true
+
+```
+::: footer
+
+Learn more: [Delta table properties](https://learn.microsoft.com/en-us/azure/databricks/delta/table-properties)
+
+:::
+
+
+
+## 9. Column Mapping 
+::: {.callout-tip title="Intermediate TIP" appearance="simple"}
+
+:::
+
+- Delta column mapping feature provided in Delta 2.0!!
+- Decouples the data fields and the metadata
+- Allows Delta table columns to use characters that are not allowed by Parquet. E.g. Spaces
+- Available in Databricks Runtime 10.2 and above.
+- Enabling column mapping for a table upgrades the Delta table version. This protocol upgrade is irreversible. 
+
+*Note this only removes the metadata (is a soft delete) unless you use the reorg feature to rewrite the physical files. 
+
+::: footer
+Learn more: [Delta Colum Mapping](https://twitter.com/DailyDatabricks/status/1564447824644915205?s=20&t=5eE__i141i2LPR9_uwnEOQ)
+:::
+## {auto-animate="true" background-image="images/columns.jpg" background-size="contain"}
+
+## 10. Performance Testing Write Format (NOOP)
+::: {.callout-tip}
+### Intermediate TIP
+:::
+
+-  Stands for **No Operation**
+-  Allows for the simulation of write operations without any actual data being written.
+-  It aids in performance testing scenarios where the focus is on analyzing the job's performance without the overhead of data write operations.
+-
+
+``` python
+  dataframe.write.format("noop").mode("overwrite").save()
+```
+
+
+
+
+
+## Thanks for listening
+:::: {.columns}
+::: {.column width="40%"}
+
+- Find out about DailyDatabricks @dailydatabricks on twitter
+- I'm @fusionet24 on twitter
+- The soon to launch [dailydatabricks.tips](https://www.dailydatabricks.tips)
+:::
+::: {.column width="60%"}
+![](images/qr.png){width="500"}
+::: 
+::::
+
+
