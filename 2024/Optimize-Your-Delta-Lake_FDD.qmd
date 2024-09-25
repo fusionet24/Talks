@@ -1,0 +1,221 @@
+---
+title: "Optimize Your Delta Lake"
+author: "Scott Bell"
+subtitle: "👨🏻‍💻"
+format:
+  revealjs: 
+    reference-location: document
+    incremental: true
+    #theme: [solarized, custom.scss]
+    theme: blood
+    slide-number: true
+    smaller: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    highlight-style: dracula
+    code-overflow: wrap
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+
+---
+
+
+## About DailyDatabricks {background-color="darkred"}
+
+A project that aims todo
+
+-   Provide Small actionable pieces of information
+-   Document the Undocumented
+-   Allow me to Implement **D-R-Y** (Do not repeat yourself) IRL
+
+. . .
+
+<br/> Learn new and wonderful hacks! 🤠
+
+![](images/qr.png){width="300"}
+
+::: footer
+[DailyDatabricks.tips](https://www.dailydatabricks.tips)
+:::
+
+
+
+## Agenda 
+
+- Why Optimise Delta?
+
+- The Basics
+
+- Advanced Delta Laking Techniques
+
+
+::: {.notes}
+- I'm excited to talk to you about how to optimise your Delta Lake. Delta Lake is an open-source storage layer that brings reliability to data lakes. It provides ACID transactions, scalable metadata handling, and unifies streaming and batch data processing. In this the next 15 minutes, we will cover various strategies and best practices to ensure your Delta Lake performs at its best.
+
+:::
+
+## Why Optimise Delta Lake?
+
+Before we dive into the how, let's briefly discuss why optimisation is crucial:
+
+- **Performance:** Faster query times and data processing.
+- **Cost Efficiency:** Reduced storage costs and computational overhead.
+- **Scalability:** Ability to handle larger datasets without degradation in performance.
+- **Data Governance:** Ensures data quality, compliance, and security by optimizing the management of data lifecycle and access controls.
+
+
+::: {.notes}
+“When we talk about optimization, it’s not just about performance. It’s about operational excellence. Optimizing Delta Lakes means ensuring systems are not only performant but stable, cost effective, reliable, and capable of meeting business needs. After all, a highly-tuned system is useless if it’s unreliable or difficult to operate. As with everything, there’s a balance to strike.”
+:::
+
+
+# Basics
+
+> Keep it simple, stupid!
+
+
+
+## Liquid Clustering in Databricks
+
+> Delta Lake liquid clustering replaces table partitioning and ZORDER to simplify data layout decisions and optimize query performance
+
+- **Default and Recommended**: Optimized for most workloads.
+- **Avoids Over Partitioning** : where columns could lead to too many partitions.
+- **No Manual Partitioning**: Automatically organizes data with **Z-cubes**.
+- **Adaptive Optimization**: Works seamlessly with tables where access patterns change over time!
+- **Delta Protocol Requirement**: May limit compatibility with non-Databricks platforms.
+- **No Downgrades**: Cannot revert the delta protocol update
+
+```sql 
+CREATE TABLE table1(col0 int, col1 string) CLUSTER BY (col0);
+```
+
+## Conversion
+
+![](liquid-conversion.png)
+
+
+
+## Delta Lake OPTIMIZE Command (With Liquid Clustering)
+
+- **Automatic Predictive Optimization**: Liquid clustering triggers **predictive data layout** adjustments, reducing the need for manual optimization.
+
+## Delta Lake OPTIMIZE Command (Without Liquid Clustering)
+
+- **Compaction**: Merges small files into larger ones to improve performance.
+- **Manual Invocation**: Needs to be triggered manually to improve query efficiency.
+- **Partition Targetable**: Works with partitioned data to enhance query speed but **can't work across partitions!**
+
+```sql
+
+OPTIMIZE {TABLE}
+
+OPTIMIZE {TABLE} WHERE {PartitionColumn} = "PartitionValue"
+```
+
+
+## Data Skipping
+
+
+Data skipping involves maintaining statistics about the data to skip over irrelevant data during query execution.
+
+We can enhance the following delta table properties:
+
+`delta.dataSkippingNumIndexedCol` default is 32
+
+`delta.dataSkippingStatsColumns` allows for column names whos stats we don't want to collect
+
+
+### Manually recompute
+You can manually trigger the recomputation of statistics for a Delta table using the following command
+
+```sql
+ANALYZE TABLE {table_name} COMPUTE DELTA STATISTICS
+```
+
+
+## Autotune File Size for Delta Tables
+
+- **Property**: `delta.tuneFileSizesForRewrites`
+- **Recommended for**: Tables with frequent **MERGE** or **DML** operations.
+- **Function**: Lowers the target file size to accelerate **write-intensive** operations.
+  
+- **Automatic Behavior**:
+  - If **9 out of the last 10** operations were MERGE, Databricks auto-sets this to `true`.
+  - Must be explicitly set to `false` to avoid automatic tuning.
+
+## Deletion Vectors in Delta Lake
+
+- A storage optimization feature that tracks deleted or modified rows without rewriting entire Parquet files.
+  
+- **How It Works**:  
+  - DELETE, UPDATE, and MERGE operations use deletion vectors to mark rows as deleted/changed.
+  - On reads, deletion vectors are applied to show the current state of the table.
+
+- Improves performance by avoiding full file rewrites.
+
+- **Enabled By Default**:  
+  - For new tables created using a SQL warehouse or **Databricks Runtime 14.1** or higher.
+
+`delta.enableDeletionVectors = true`
+
+## Vacuuming in Delta Tables
+
+- **Data Retention**: Removes old versions of data and files no longer needed.
+- **Command**: `VACUUM` cleans up files older than a retention threshold.
+- **Retention Period**: Default is 7 days; can be customized.
+- **Prevents Storage Bloat**: Reduces unnecessary storage costs by removing stale data.
+- **Caution**: Be mindful of retention periods; early removal may affect time travel or recovery of past data.
+
+##  Delta Retention Logs {auto-animate="true"}
+
+
+::: incremental
+
+VACUUM removes all files from the table directory that are not managed by Delta, as well as data files that are no longer in the latest state of the transaction log for the table.Vacuum deletes only data files, not log files. Log files are deleted automatically and asynchronously after checkpoint operations. 
+
+- delta.logRetentionDuration = "interval <interval>": controls how long the history for a table is kept. 
+
+
+- delta.deletedFileRetentionDuration = "interval <interval>": controls how long ago a file must have been deleted before being a candidate for VACUUM.
+
+:::
+
+
+![](images/DeltaLog.png)
+
+
+::: footer
+Learn more: [Delta Data Rentention](https://docs.delta.io/latest/delta-batch.html#-data-retention)
+:::
+
+## Column Mapping 
+
+
+- Delta column mapping feature provided in Delta 2.0!!
+- Decouples the data fields and the metadata
+- Allows Delta table columns to use characters that are not allowed by Parquet. E.g. Spaces
+- Enabling column mapping for a table upgrades the Delta table version. This protocol upgrade is irreversible. 
+- Note this only removes the metadata (is a soft delete) unless you use the reorg feature to rewrite the physical files. 
+
+`delta.columnMapping.mode = 'name'`
+
+## Thanks for listening
+:::: {.columns}
+::: {.column width="40%"}
+
+- Find out about DailyDatabricks @dailydatabricks on twitter
+- I'm @fusionet24 on twitter
+- [dailydatabricks.tips](https://www.dailydatabricks.tips)
+:::
+::: {.column width="60%"}
+![](images/qr.png){width="500"}
+::: 
+::::
+
+
+
+
+
+
