@@ -1,0 +1,51 @@
+/*-- scss:defaults --*/
+$body-bg: #0f0f0f;
+$body-color: #e0e0e0;
+$link-color: #00ffff;
+$code-color: #ff6ec7;
+$font-family-sans-serif: 'JetBrains Mono', monospace;
+
+$presentation-heading-color: #39ff14;
+$presentation-heading-text-shadow: 0 0 5px #39ff14;
+
+$code-bg: #1a1a1a;
+$border-color: #39ff14;
+$table-border-color: #39ff14;
+
+/*-- scss:rules --*/
+.reveal {
+  background-color: $body-bg;
+  color: $body-color;
+
+  h1, h2, h3, h4, h5, h6 {
+    text-shadow: $presentation-heading-text-shadow;
+  }
+
+  a {
+    text-shadow: 0 0 3px $link-color;
+  }
+
+  blockquote {
+    border-left: 3px solid #ffe600;
+    padding-left: 1em;
+    color: #ffe600;
+  }
+
+  table {
+    border: 1px solid $border-color;
+  }
+
+  th, td {
+    border: 1px solid $border-color;
+    padding: 0.5em;
+  }
+
+  .reveal .controls {
+    color: $link-color;
+  }
+
+  .reveal .progress {
+    background: #444;
+    color: $link-color;
+  }
+}
