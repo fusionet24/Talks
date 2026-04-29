@@ -1,0 +1,135 @@
+/*-- scss:defaults --*/
+
+// RapidData brand palette
+$rd-red: #c0392b;
+$rd-dark-red: #922b21;
+$rd-charcoal: #1a1a2e;
+$rd-dark: #0f0f1a;
+$rd-white: #f5f5f5;
+$rd-light-grey: #cccccc;
+$rd-accent-blue: #31BAE9;
+
+$body-bg: $rd-charcoal;
+$body-color: $rd-white;
+$link-color: $rd-accent-blue;
+$code-color: $rd-accent-blue;
+$font-family-sans-serif: 'Inter', 'Segoe UI', system-ui, sans-serif;
+
+$presentation-heading-color: $rd-white;
+$presentation-heading-font-weight: 700;
+
+$code-bg: darken($rd-charcoal, 5%);
+$border-color: $rd-red;
+
+/*-- scss:rules --*/
+.reveal {
+  background: linear-gradient(135deg, $rd-dark 0%, $rd-charcoal 60%, darken($rd-dark-red, 15%) 100%);
+
+  h1, h2, h3 {
+    border-bottom: 3px solid $rd-red;
+    padding-bottom: 0.3em;
+    text-transform: none;
+  }
+
+  .subtitle {
+    color: $rd-light-grey;
+    font-size: 0.9em;
+  }
+
+  a {
+    color: $rd-accent-blue;
+    text-decoration: none;
+    &:hover {
+      color: lighten($rd-accent-blue, 15%);
+      text-decoration: underline;
+    }
+  }
+
+  .brand-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba($rd-red, 0.4);
+    border-left: 4px solid $rd-red;
+    border-radius: 8px;
+    padding: 0.6em 1em;
+    margin: 0.4em 0;
+    font-size: 0.75em;
+    transition: background 0.2s;
+  }
+
+  .brand-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .brand-card a {
+    font-weight: 600;
+  }
+
+  .brand-card .card-desc {
+    color: $rd-light-grey;
+    font-size: 0.9em;
+    margin-top: 0.15em;
+  }
+
+  .cert-badge {
+    background: linear-gradient(135deg, $rd-red, $rd-dark-red);
+    color: white;
+    padding: 0.3em 0.8em;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85em;
+    display: inline-block;
+    margin: 0.3em 0;
+  }
+
+  .slide-footer {
+    font-size: 0.55em;
+    color: $rd-light-grey;
+    text-align: center;
+    margin-top: 1.5em;
+  }
+
+  .slide-footer a {
+    color: $rd-accent-blue;
+    margin: 0 0.5em;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .about-list li {
+    padding: 0.2em 0;
+    padding-left: 1.2em;
+    position: relative;
+    font-size: 0.8em;
+  }
+
+  .about-list li::before {
+    content: "\25B8";
+    color: $rd-red;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+  }
+
+  .controls {
+    color: $rd-red;
+  }
+
+  .progress {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .progress span {
+    background: $rd-red;
+  }
+
+  section.present {
+    // ensure footer visibility
+    .footer {
+      color: $rd-light-grey;
+      a { color: $rd-accent-blue; }
+    }
+  }
+}

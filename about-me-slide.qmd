@@ -1,0 +1,145 @@
+## About Scott {.smaller .rd-about background-color="#1a1a2e" background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)"}
+
+```{=html}
+<style>
+/* RapidData brand - scoped to rd-about slides only */
+.rd-about h2 {
+  color: #f5f5f5 !important;
+  border-bottom: 3px solid #c0392b !important;
+  padding-bottom: 0.3em !important;
+  text-shadow: none !important;
+}
+.rd-about {
+  color: #f5f5f5 !important;
+}
+.rd-about a {
+  color: #31BAE9 !important;
+  text-decoration: none !important;
+}
+.rd-about a:hover {
+  color: #5ccfee !important;
+  text-decoration: underline !important;
+}
+.rd-about .cert-badge {
+  background: linear-gradient(135deg, #c0392b, #922b21);
+  color: white;
+  padding: 0.3em 0.8em;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85em;
+  display: inline-block;
+  margin: 0.3em 0;
+}
+.rd-about .about-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+.rd-about .about-list li {
+  padding: 0.2em 0;
+  padding-left: 1.2em;
+  position: relative;
+  font-size: 0.8em;
+  color: #f5f5f5;
+}
+.rd-about .about-list li::before {
+  content: "\25B8";
+  color: #c0392b;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+.rd-about .brand-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-left: 4px solid #c0392b;
+  border-radius: 8px;
+  padding: 0.6em 1em;
+  margin: 0.4em 0;
+  font-size: 0.75em;
+}
+.rd-about .brand-card a {
+  font-weight: 600;
+}
+.rd-about .card-desc {
+  color: #cccccc;
+  font-size: 0.9em;
+  margin-top: 0.15em;
+}
+.rd-about .slide-footer {
+  font-size: 0.55em;
+  color: #cccccc;
+  text-align: center;
+  margin-top: 1.5em;
+}
+.rd-about .slide-footer a {
+  color: #31BAE9 !important;
+  margin: 0 0.5em;
+}
+</style>
+```
+
+::: columns
+::: {.column width="35%"}
+
+![](images/certs2.png){width="280"}
+
+[30+ Industry Certifications]{.cert-badge}
+
+:::
+
+::: {.column width="62%"}
+
+::: {.about-list}
+
+- Principal Data & AI Consultant at [RapidData](https://rapiddata.dev)
+- Former Avanade Databricks SME & Altius Consultant
+- MSc Computer Science -- Secure Machine Learning
+- Interests: Data Platforms, Intelligent Apps, AI Security, Architecture & Design Patterns
+- Passionate about Beer & Rugby League
+
+:::
+
+:::
+:::
+
+::: {.slide-footer}
+[rapiddata.dev](https://rapiddata.dev) | [myyearindata.com](https://myyearindata.com) | [dailydatabricks.tips](https://dailydatabricks.tips) | [databricks.news](https://databricks.news)
+:::
+
+## My Projects {.smaller .rd-about background-color="#1a1a2e" background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)"}
+
+::: {.brand-card}
+[rapiddata.dev](https://rapiddata.dev) -- Discover Cloud Based Services
+
+::: {.card-desc}
+Transforming businesses through AI and data solutions
+:::
+:::
+
+::: {.brand-card}
+[databricks.news](https://databricks.news) -- Unofficially Essential
+
+::: {.card-desc}
+The must-read Databricks newsletter scanning hundreds of sources weekly
+:::
+:::
+
+::: {.brand-card}
+[dailydatabricks.tips](https://dailydatabricks.tips) -- Tips, Tricks & Hacks
+
+::: {.card-desc}
+Small actionable pieces of information. Document the Undocumented. D-R-Y IRL
+:::
+:::
+
+::: {.brand-card}
+[myyearindata.com](https://myyearindata.com) -- Data Engineering & AI Insights
+
+::: {.card-desc}
+Practical perspectives on building intelligent data systems
+:::
+:::
+
+::: {.slide-footer}
+[rapiddata.dev](https://rapiddata.dev) | [myyearindata.com](https://myyearindata.com) | [dailydatabricks.tips](https://dailydatabricks.tips) | [databricks.news](https://databricks.news)
+:::

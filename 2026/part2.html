@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="part2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="part2_files/libs/quarto-html/tabby.min.js"></script>
+<script src="part2_files/libs/quarto-html/popper.min.js"></script>
+<script src="part2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="part2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="part2_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="part2_files/libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.27">
+
+  <meta name="author" content="Scott Bell">
+  <meta name="author" content="Mihaly Kavasi">
+  <meta name="dcterms.date" content="2026-04-25">
+  <title>Building Context, Not Vibes</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="part2_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="part2_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="part2_files/libs/revealjs/dist/theme/quarto-327cab17de08e4a17faa7d61f48ae591.css">
+  <link href="part2_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="part2_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="part2_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="part2_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="part2_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="part2_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Building Context, Not Vibes</h1>
+  <p class="subtitle">Practical AI Augmented Data Engineering — Part 2</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Scott Bell 
+</div>
+</div>
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Mihaly Kavasi 
+</div>
+</div>
+</div>
+
+  <p class="date">2026-04-25</p>
+</section>
+<section class="slide level2">
+
+<style>
+/* Speaker badges — bottom-right of each tagged slide */
+.reveal .slides section.by-scott::after,
+.reveal .slides section.by-mihaly::after,
+.reveal .slides section.by-both::after {
+  content: "";
+  position: absolute;
+  bottom: 16px;
+  right: 22px;
+  height: 68px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.9;
+  z-index: 5;
+  pointer-events: none;
+}
+.reveal .slides section.by-scott::after {
+  width: 104px;
+  background-image: url("images/RapiData-White.png");
+  background-position: right center;
+}
+.reveal .slides section.by-mihaly::after {
+  width: 104px;
+  background-image: url("images/logo_oneday.png");
+  background-position: right center;
+}
+.reveal .slides section.by-both::after {
+  width: 220px;
+  background-image: url("images/RapiData-White.png"), url("images/logo_oneday.png");
+  background-position: left center, right center;
+  background-size: 96px auto, 96px auto;
+}
+</style>
+</section>
+<section id="building-context-not-vibes" class="slide level2 by-both" data-background-color="#1a1a2e" data-background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)">
+<h2>Building Context, Not Vibes</h2>
+<h3 id="practical-ai-augmented-data-engineering-part-2">Practical AI Augmented Data Engineering — Part 2</h3>
+</section>
+<section id="about-scott" class="slide level2 smaller rd-about by-scott" data-background-color="#1a1a2e" data-background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)">
+<h2>About Scott</h2>
+<style>
+/* RapidData brand - scoped to rd-about slides only */
+.rd-about h2 {
+  color: #f5f5f5 !important;
+  border-bottom: 3px solid #c0392b !important;
+  padding-bottom: 0.3em !important;
+  text-shadow: none !important;
+}
+.rd-about {
+  color: #f5f5f5 !important;
+}
+.rd-about a {
+  color: #31BAE9 !important;
+  text-decoration: none !important;
+}
+.rd-about a:hover {
+  color: #5ccfee !important;
+  text-decoration: underline !important;
+}
+.rd-about .cert-badge {
+  background: linear-gradient(135deg, #c0392b, #922b21);
+  color: white;
+  padding: 0.3em 0.8em;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85em;
+  display: inline-block;
+  margin: 0.3em 0;
+}
+.rd-about .about-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+.rd-about .about-list li {
+  padding: 0.2em 0;
+  padding-left: 1.2em;
+  position: relative;
+  font-size: 0.8em;
+  color: #f5f5f5;
+}
+.rd-about .about-list li::before {
+  content: "\25B8";
+  color: #c0392b;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+.rd-about .brand-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-left: 4px solid #c0392b;
+  border-radius: 8px;
+  padding: 0.6em 1em;
+  margin: 0.4em 0;
+  font-size: 0.75em;
+}
+.rd-about .brand-card a {
+  font-weight: 600;
+}
+.rd-about .card-desc {
+  color: #cccccc;
+  font-size: 0.9em;
+  margin-top: 0.15em;
+}
+.rd-about .slide-footer {
+  font-size: 0.55em;
+  color: #cccccc;
+  text-align: center;
+  margin-top: 1.5em;
+}
+.rd-about .slide-footer a {
+  color: #31BAE9 !important;
+  margin: 0 0.5em;
+}
+</style>
+<div class="columns">
+<div class="column" style="width:35%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/certs2.png" alt="Grid of 30+ Azure, Databricks, and GitHub certification badges" width="280"></p>
+<figcaption>Scott’s industry certifications</figcaption>
+</figure>
+</div>
+<p><span class="cert-badge">30+ Industry Certifications</span></p>
+</div><div class="column" style="width:62%;">
+<div class="about-list">
+<ul>
+<li>Principal Data &amp; AI Consultant at <a href="https://rapiddata.dev">RapidData</a></li>
+<li>Former Avanade Databricks SME &amp; Altius Consultant</li>
+<li>MSc Computer Science – Secure Machine Learning</li>
+<li>Interests: Data Platforms, Intelligent Apps, AI Security, Architecture &amp; Design Patterns</li>
+<li>Passionate about Beer &amp; Rugby League</li>
+</ul>
+</div>
+</div></div>
+<div class="slide-footer">
+<p><a href="https://rapiddata.dev">rapiddata.dev</a> | <a href="https://myyearindata.com">myyearindata.com</a> | <a href="https://dailydatabricks.tips">dailydatabricks.tips</a> | <a href="https://databricks.news">databricks.news</a></p>
+</div>
+</section>
+<section id="my-projects" class="slide level2 smaller rd-about" data-background-color="#1a1a2e" data-background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)">
+<h2>My Projects</h2>
+<div class="brand-card">
+<p><a href="https://rapiddata.dev">rapiddata.dev</a> – Discover Cloud Based Services</p>
+<div class="card-desc">
+<p>Transforming businesses through AI and data solutions</p>
+</div>
+</div>
+<div class="brand-card">
+<p><a href="https://databricks.news">databricks.news</a> – Unofficially Essential</p>
+<div class="card-desc">
+<p>The must-read Databricks newsletter scanning hundreds of sources weekly</p>
+</div>
+</div>
+<div class="brand-card">
+<p><a href="https://dailydatabricks.tips">dailydatabricks.tips</a> – Tips, Tricks &amp; Hacks</p>
+<div class="card-desc">
+<p>Small actionable pieces of information. Document the Undocumented. D-R-Y IRL</p>
+</div>
+</div>
+<div class="brand-card">
+<p><a href="https://myyearindata.com">myyearindata.com</a> – Data Engineering &amp; AI Insights</p>
+<div class="card-desc">
+<p>Practical perspectives on building intelligent data systems</p>
+</div>
+</div>
+<div class="slide-footer">
+<p><a href="https://rapiddata.dev">rapiddata.dev</a> | <a href="https://myyearindata.com">myyearindata.com</a> | <a href="https://dailydatabricks.tips">dailydatabricks.tips</a> | <a href="https://databricks.news">databricks.news</a></p>
+</div>
+</section>
+<section id="about-mihaly" class="slide level2 smaller odb-about by-mihaly" data-background-color="#F8FAFC">
+<h2>About Mihaly</h2>
+<style>
+/* One Day BI brand - scoped to odb-about slides only */
+.odb-about {
+  color: #334155 !important;
+  position: relative;
+  font-family: 'Calibri', 'Helvetica Neue', Arial, sans-serif;
+}
+.odb-about::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #F59E0B;
+}
+.odb-about h2 {
+  color: #0F172A !important;
+  font-family: 'Arial', sans-serif !important;
+  border-bottom: 3px solid #F59E0B !important;
+  padding-bottom: 0.3em !important;
+  text-shadow: none !important;
+  font-weight: 700 !important;
+}
+.odb-about a {
+  color: #D97706 !important;
+  text-decoration: none !important;
+  font-weight: 600;
+}
+.odb-about a:hover {
+  color: #F59E0B !important;
+  text-decoration: underline !important;
+}
+.odb-about .odb-logo {
+  display: block;
+  max-width: 160px;
+  margin: 0 auto 0.4em auto;
+}
+.odb-about .odb-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border: 3px solid #F59E0B;
+  box-shadow: 0 3px 9px rgba(15, 23, 42, 0.15);
+}
+.odb-about .cert-badge {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  color: #0F172A;
+  padding: 0.22em 0.7em;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 0.62em;
+  display: inline-block;
+  margin: 0.2em 0.1em;
+  font-family: 'Arial', sans-serif;
+}
+.odb-about .about-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+.odb-about .about-list li {
+  padding: 0.25em 0;
+  padding-left: 1.3em;
+  position: relative;
+  font-size: 0.78em;
+  color: #334155;
+  line-height: 1.45;
+}
+.odb-about .about-list li::before {
+  content: "\25B8";
+  color: #F59E0B;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+.odb-about .about-list li strong {
+  color: #0F172A;
+  font-family: 'Arial', sans-serif;
+}
+.odb-about .photo-col {
+  text-align: center;
+}
+.odb-about .headline-badges {
+  text-align: center;
+  margin-top: 0.35em;
+  line-height: 1.3;
+}
+.odb-about .slide-footer {
+  font-size: 0.55em;
+  color: #64748B;
+  text-align: center;
+  margin-top: 0.8em;
+  padding-top: 0.4em;
+  border-top: 1px solid #E2E8F0;
+}
+.odb-about .slide-footer a {
+  color: #D97706 !important;
+  margin: 0 0.5em;
+}
+</style>
+<div class="columns">
+<div class="column photo-col" style="width:35%;">
+<p><img data-src="OneDay%20BI%20Design%20content/onedaybilogo_transparent.png" class="odb-logo" alt="One Day BI logo"></p>
+<p><img data-src="OneDay%20BI%20Design%20content/ProfilePicture.jpeg" class="odb-photo" alt="Mihaly Kavasi headshot"></p>
+<div class="headline-badges">
+<p><span class="cert-badge">Microsoft Certified Trainer</span> <span class="cert-badge">Fast Track Power BI Solution Architect</span></p>
+</div>
+</div><div class="column" style="width:62%;">
+<div class="about-list">
+<ul>
+<li><strong>Founder</strong> of <a href="https://onedaybi.com">One Day BI</a> – Microsoft analytics consultancy</li>
+<li>Helps customers define <strong>optimal governance</strong> and implement the right mix of governed self-service BI</li>
+<li>Advises on <strong>security, performance optimization</strong> and managing large-scale Power BI deployments</li>
+<li>Nurtures the next generation of analysts with an emphasis on <strong>user needs and UX</strong></li>
+<li><strong>Microsoft Certified Trainer</strong> since 2018</li>
+<li><strong>Fast Track Recognized Solution Architect</strong> for Power BI since 2021</li>
+<li>Shares practical patterns for data transformation at <a href="https://selfservicebi.co.uk">selfservicebi.co.uk</a></li>
+</ul>
+</div>
+</div></div>
+<div class="slide-footer">
+<p><a href="https://onedaybi.com">onedaybi.com</a> | <a href="https://selfservicebi.co.uk">selfservicebi.co.uk</a> | hello@onedaybi.com</p>
+</div>
+</section>
+<section id="section" class="slide level2 section-slide" data-background-color="#1a1a2e" data-background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)">
+<h2></h2>
+</section>
+<section>
+<section id="part-1-recap" class="title-slide slide level1 center">
+<h1>Part 1 — Recap</h1>
+<p>Eight moving parts. One pipeline to build.</p>
+<aside class="notes">
+<p>🎤 Scott — opening Part 2 (3 min total). Welcome back. Reset the room; remind them this is the live build. Bridge into the Full Picture recap slide.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-full-picture-one-more-time" class="slide level2 smaller">
+<h2>The Full Picture — one more time</h2>
+<style>
+.dtk-full{--a:rgba(255,255,255,0.85);--card:#1a1a1f;--txt:#f0f6fc;--txt3:rgba(240,246,252,0.55);--bdr2:rgba(240,246,252,0.15);font-family:'Inter',sans-serif;padding:16px}
+.dtk-full .full-flow{display:flex;align-items:stretch;gap:0;margin:12px 0;flex-wrap:wrap}
+.dtk-full .full-step{flex:1;min-width:180px;display:flex;align-items:center}
+.dtk-full .full-box{flex:1;background:var(--card);border:1.5px solid var(--bdr2);border-radius:10px;padding:14px 10px;text-align:center;transition:border-color 0.2s}
+.dtk-full .full-box:hover{border-color:var(--a)}
+.dtk-full .full-box.hl{border-color:var(--a);background:rgba(255,255,255,0.06)}
+.dtk-full .full-num{font-size:9px;font-weight:700;color:var(--a);letter-spacing:0.05em;margin-bottom:3px}
+.dtk-full .full-title{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.dtk-full .full-desc{font-size:9px;color:var(--txt3)}
+.dtk-full .full-arrow{color:var(--a);font-size:14px;padding:0 5px;flex-shrink:0;opacity:0.5}
+</style>
+
+<div class="dtk-full">
+<div class="full-flow">
+<div class="full-step"><div class="full-box"><div class="full-num">01</div><div class="full-title">Intent</div><div class="full-desc">Stop gaming the metric</div></div><span class="full-arrow">▶</span></div>
+<div class="full-step"><div class="full-box"><div class="full-num">02</div><div class="full-title">Context</div><div class="full-desc">Assemble what it sees</div></div><span class="full-arrow">▶</span></div>
+<div class="full-step"><div class="full-box"><div class="full-num">03</div><div class="full-title">Instructions</div><div class="full-desc">Teach the rules once</div></div><span class="full-arrow">▶</span></div>
+<div class="full-step"><div class="full-box"><div class="full-num">04</div><div class="full-title">MCP</div><div class="full-desc">Access to the world</div></div><span class="full-arrow">▶</span></div>
+<div class="full-step"><div class="full-box"><div class="full-num">05</div><div class="full-title">Agents</div><div class="full-desc">Specialist sub-workers</div></div><span class="full-arrow">▶</span></div>
+<div class="full-step"><div class="full-box"><div class="full-num">06</div><div class="full-title">Skills</div><div class="full-desc">Consistent outputs</div></div><span class="full-arrow">▶</span></div>
+<div class="full-step"><div class="full-box"><div class="full-num">07</div><div class="full-title">Hooks</div><div class="full-desc">Policy as enforcement</div></div><span class="full-arrow">▶</span></div>
+<div class="full-step"><div class="full-box hl"><div class="full-num">08</div><div class="full-title">Memory</div><div class="full-desc">Experience carries over</div></div></div>
+</div>
+</div>
+<div class="subtext">
+<p>Now watch what happens when we use all eight — at once — on one real pipeline.</p>
+</div>
+<aside class="notes">
+<p>🎤 Scott — Part 1 recap. Point at each chip, one sentence per concept. Close with: “In the next 35 minutes, you’ll see every one of these in motion.”</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-process-the-plugin-replicates" class="slide level2 smaller">
+<h2>The Process the Plugin Replicates</h2>
+<style>
+.reveal .sop-header{max-width:1120px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;background:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 100%);border:1px solid rgba(255,255,255,0.2);border-radius:10px}
+.reveal .sop-header .sop-plugin{display:flex;align-items:center;gap:10px}
+.reveal .sop-header .sop-pkg{font-size:13px;color:rgba(240,246,252,0.55);font-family:'SF Mono',Menlo,Consolas,monospace}
+.reveal .sop-header .sop-name{font-size:17px;font-weight:700;color:#f0f6fc;font-family:'SF Mono',Menlo,Consolas,monospace;letter-spacing:0.01em}
+.reveal .sop-header .sop-wip{display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;background:#f59e0b;color:#1a1a1f;padding:3px 9px;border-radius:4px}
+.reveal .sop-header .sop-cmd{font-size:12px;font-family:'SF Mono',Menlo,Consolas,monospace;color:#f0f6fc;background:#0b0b0d;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 12px;letter-spacing:0.01em}
+.reveal .sop-header .sop-cmd .sop-prompt{color:rgba(255,255,255,0.4);margin-right:6px}
+.reveal .sop-header .sop-cmd .sop-slash{color:#60a5fa}
+.reveal .sop-map{max-width:1120px;margin:8px auto 0}
+.reveal .sop-lane{display:grid;grid-template-columns:170px 1fr;align-items:center;gap:14px;margin-bottom:9px;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.1)}
+.reveal .sop-lane-a{background:linear-gradient(90deg,rgba(88,133,255,0.14),rgba(88,133,255,0.03))}
+.reveal .sop-lane-b{background:linear-gradient(90deg,rgba(140,115,210,0.14),rgba(140,115,210,0.03))}
+.reveal .sop-lane-c{background:linear-gradient(90deg,rgba(210,115,115,0.14),rgba(210,115,115,0.03))}
+.reveal .sop-lane-d{background:linear-gradient(90deg,rgba(230,160,85,0.16),rgba(230,160,85,0.03))}
+.reveal .sop-lane-bonus{background:linear-gradient(90deg,rgba(52,211,153,0.18),rgba(52,211,153,0.03));border-color:rgba(52,211,153,0.35);border-style:dashed}
+.reveal .sop-lane-bonus .sop-letter{background:rgba(52,211,153,0.35);color:#fff}
+.reveal .sop-chip.bonus{border-color:rgba(52,211,153,0.55);background:rgba(52,211,153,0.1)}
+.reveal .sop-phase{font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:rgba(240,246,252,0.9);line-height:1.2;display:flex;align-items:center}
+.reveal .sop-phase .sop-letter{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.15);margin-right:10px;font-weight:800;font-size:13px;color:#fff}
+.reveal .sop-phase .sop-pname{display:block;line-height:1.25}
+.reveal .sop-phase .sop-prange{display:block;font-size:10px;color:rgba(240,246,252,0.55);margin-top:2px;font-weight:600;letter-spacing:0.04em}
+.reveal .sop-steps{display:flex;flex-wrap:wrap;gap:6px}
+.reveal .sop-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:5px 12px 5px 6px;font-size:12px;color:#f0f6fc;white-space:nowrap;line-height:1.2}
+.reveal .sop-chip .sop-num{font-weight:800;color:#fff;font-size:10.5px;background:rgba(255,255,255,0.15);min-width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+.reveal .sop-chip .sop-mark{font-size:11px;margin-left:2px;opacity:0.9}
+.reveal .sop-chip.human{border-color:rgba(255,200,90,0.65);background:rgba(255,200,90,0.08)}
+.reveal .sop-caption{text-align:center;margin-top:16px;font-size:15px;color:#f0f6fc;font-weight:600;letter-spacing:0.01em}
+.reveal .sop-legend{display:flex;justify-content:center;gap:24px;margin-top:10px;font-size:11px;color:rgba(240,246,252,0.6)}
+.reveal .sop-legend span{display:inline-flex;align-items:center;gap:5px}
+</style>
+<aside class="notes">
+<p>🎤 Mihaly — bridge slide before the demo. Point at the two 👤 touchpoints and the 🔒 gates. Line: <em>“This is a real enterprise process. Now watch the plugin run all of it — and stop exactly where a human should.”</em></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="sop-header">
+<div class="sop-plugin">
+<p><span class="sop-pkg">📦</span> <span class="sop-name">dbt-pipeline-toolkit</span> <span class="sop-wip">🚧 Work in Progress</span></p>
+</div>
+<p><code class="sop-cmd"><span class="sop-prompt">$</span><span class="sop-slash">/plugin</span> marketplace add KavasiMihaly/AI-plugins</code></p>
+</div>
+<div class="sop-map">
+<div class="sop-lane sop-lane-a">
+<div class="sop-phase">
+<span class="sop-letter">A</span><span><span class="sop-pname">Preparation</span><span class="sop-prange">steps 1–3</span></span>
+</div>
+<div class="sop-steps">
+<div class="sop-chip">
+<span class="sop-num">1</span>Verify environment<span class="sop-mark">🔒</span>
+</div>
+<div class="sop-chip">
+<span class="sop-num">2</span>Source access<span class="sop-mark">🔒</span>
+</div>
+<div class="sop-chip">
+<span class="sop-num">3</span>Profile sources
+</div>
+</div>
+</div>
+<div class="sop-lane sop-lane-b">
+<div class="sop-phase">
+<span class="sop-letter">B</span><span><span class="sop-pname">Design &amp; Approval</span><span class="sop-prange">steps 4–6</span></span>
+</div>
+<div class="sop-steps">
+<div class="sop-chip human">
+<span class="sop-num">4</span>Requirements<span class="sop-mark">👤</span>
+</div>
+<div class="sop-chip">
+<span class="sop-num">5</span>Draft design
+</div>
+<div class="sop-chip human">
+<span class="sop-num">6</span>Design approval<span class="sop-mark">👤 🔒</span>
+</div>
+</div>
+</div>
+<div class="sop-lane sop-lane-c">
+<div class="sop-phase">
+<span class="sop-letter">C</span><span><span class="sop-pname">Build</span><span class="sop-prange">steps 7–12</span></span>
+</div>
+<div class="sop-steps">
+<div class="sop-chip">
+<span class="sop-num">7</span>Workspace
+</div>
+<div class="sop-chip">
+<span class="sop-num">8</span>Load data
+</div>
+<div class="sop-chip">
+<span class="sop-num">9</span>Staging<span class="sop-mark">🔒</span>
+</div>
+<div class="sop-chip">
+<span class="sop-num">10</span>Dimensions<span class="sop-mark">🔒</span>
+</div>
+<div class="sop-chip">
+<span class="sop-num">11</span>Facts<span class="sop-mark">🔒</span>
+</div>
+<div class="sop-chip">
+<span class="sop-num">12</span>Tests<span class="sop-mark">🔒</span>
+</div>
+</div>
+</div>
+<div class="sop-lane sop-lane-d">
+<div class="sop-phase">
+<span class="sop-letter">D</span><span><span class="sop-pname">Validation &amp; Handoff</span><span class="sop-prange">steps 13–14</span></span>
+</div>
+<div class="sop-steps">
+<div class="sop-chip">
+<span class="sop-num">13</span>Validate end-to-end<span class="sop-mark">🔒</span>
+</div>
+<div class="sop-chip">
+<span class="sop-num">14</span>Handoff
+</div>
+</div>
+</div>
+<div class="sop-lane sop-lane-bonus">
+<div class="sop-phase">
+<span class="sop-letter">+</span><span><span class="sop-pname">Bonus</span><span class="sop-prange">beyond SOP</span></span>
+</div>
+<div class="sop-steps">
+<div class="sop-chip bonus">
+<span class="sop-num">15</span>Power BI Project<span class="sop-mark">✨</span>
+</div>
+<div class="sop-chip bonus">
+<span class="sop-num">16</span>Data sources wired in<span class="sop-mark">✨</span>
+</div>
+</div>
+</div>
+</div>
+<div class="sop-legend">
+<p><span>👤 Product Owner touchpoint</span> <span>🔒 Quality gate</span> <span>✨ Plugin bonus — beyond the SOP</span></p>
+</div>
+<div class="sop-caption">
+14 SOP steps · 4 phases · 2 human gates — plus a ready-to-open Power BI Project.
+</div>
+</section>
+<section id="section-1" class="slide level2 section-slide" data-background-color="#1a1a2e" data-background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)">
+<h2></h2>
+</section></section>
+<section>
+<section id="the-demo" class="title-slide slide level1 center">
+<h1>The Demo</h1>
+<aside class="notes">
+<p>🎤 Joint — Scott &amp; Mihaly. The demo terminal is the hero; these 8 companion slides are reference cards to flip to between beats.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<style>
+.reveal .demo-companion{max-width:1000px;margin:0 auto;padding:24px 32px;background:linear-gradient(135deg,rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.02) 100%);border:1px solid rgba(255,255,255,0.18);border-left:5px solid #f0f6fc;border-radius:12px;text-align:left}
+.reveal .demo-companion .dc-chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#1a1a1f;background:#f0f6fc;padding:4px 10px;border-radius:4px;margin-bottom:14px}
+.reveal .demo-companion .dc-live{font-size:15px;color:rgba(240,246,252,0.75);font-style:italic;margin:0 0 20px 0;line-height:1.5;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:14px}
+.reveal .demo-companion .dc-live strong{color:#f0f6fc;font-style:normal}
+.reveal .demo-companion h4{font-size:11px;font-weight:700;letter-spacing:0.08em;color:rgba(240,246,252,0.7);text-transform:uppercase;margin:0 0 10px 0}
+.reveal .demo-companion ul{margin:0 0 20px 0;padding-left:22px;list-style:none}
+.reveal .demo-companion ul li{font-size:15px;color:#f0f6fc;line-height:1.55;margin-bottom:8px;position:relative}
+.reveal .demo-companion ul li::before{content:"▸";position:absolute;left:-18px;color:rgba(255,255,255,0.5);font-size:12px;top:1px}
+.reveal .demo-companion ul li strong{color:#fff}
+.reveal .demo-companion ul li code{background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px;font-size:13px;color:#f0f6fc}
+.reveal .demo-companion .dc-takeaway{background:rgba(255,255,255,0.08);border-radius:8px;padding:12px 18px;font-size:16px;font-weight:600;color:#f0f6fc;text-align:center;letter-spacing:0.01em}
+.reveal .demo-companion .dc-takeaway::before{content:"→ ";color:rgba(255,255,255,0.5)}
+.reveal .demo-companion .dc-split{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:center;margin-bottom:14px}
+.reveal .demo-companion .dc-split > div ul{margin-bottom:0}
+.reveal .demo-companion .dc-split .dc-image,
+.reveal .demo-companion img.dc-image{display:block;width:100%;max-width:340px;height:auto;border-radius:8px;border:1px solid rgba(255,255,255,0.18);box-shadow:0 6px 18px rgba(0,0,0,0.45);margin:0}
+.reveal .demo-with-side{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:center;max-width:1220px;margin:0 auto}
+.reveal .demo-with-side .demo-companion{max-width:none;margin:0}
+.reveal .demo-with-side img.dc-side{display:block;width:100%;max-width:360px;height:auto;border-radius:10px;border:1px solid rgba(255,255,255,0.2);box-shadow:0 8px 22px rgba(0,0,0,0.55);margin:0}
+.reveal .demo-with-side .dc-side-stack{display:flex;flex-direction:column;gap:10px}
+.reveal .demo-with-side .dc-side-stack img,
+.reveal .demo-with-side .dc-side-stack p img{display:block;width:100%;max-width:360px;height:auto;border-radius:8px;border:1px solid rgba(255,255,255,0.2);box-shadow:0 6px 16px rgba(0,0,0,0.5);margin:0}
+.reveal .demo-with-side .dc-side-stack p{margin:0}
+</style>
+</section>
+<section id="demo-3.1-multi-agent-framework" class="slide level2 smaller">
+<h2>Demo 3.1 — Multi-Agent Framework</h2>
+<div class="demo-with-side">
+<div class="demo-companion">
+<p><span class="dc-chip">Demo 3.1</span></p>
+<div class="dc-live">
+<p><strong>Live:</strong> orchestrator agent kicks off the pipeline build. It never writes SQL itself — it hands every unit of work to a specialist sub-agent.</p>
+</div>
+<h4 id="watch-for">Watch for</h4>
+<ul>
+<li>The <strong>orchestrator</strong> plans, delegates, reviews — it doesn’t code.</li>
+<li>Each <strong>sub-agent</strong> has its own fresh context: <code>business-analyst</code>, <code>data-explorer</code>, <code>dbt-staging-builder</code>, <code>dbt-fact-builder</code>…</li>
+<li>Returns come back as <strong>summaries</strong>, not transcripts — the manager stays clean.</li>
+</ul>
+<div class="dc-takeaway">
+<p>The manager doesn’t write the code. The specialists do.</p>
+</div>
+</div>
+<p><img data-src="images/Demo31_Multiagent_Code.png" class="dc-side" alt="Orchestrator delegation call in code"></p>
+</div>
+<aside class="notes">
+<p>🎤 Mihaly — show the orchestrator’s delegation call. Point at the sub-agent list. Emphasise clean context.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="demo-3.2-foreground-vs-background" class="slide level2 smaller">
+<h2>Demo 3.2 — Foreground vs Background</h2>
+<div class="demo-with-side">
+<div class="demo-companion">
+<p><span class="dc-chip">Demo 3.2</span></p>
+<div class="dc-live">
+<p><strong>Live:</strong> two agents in flight at once. One waits on a human answer; the other crunches 1.2M rows and pings us when it’s done.</p>
+</div>
+<h4 id="watch-for-1">Watch for</h4>
+<div style="margin-bottom:10px">
+<ul>
+<li><strong>Foreground</strong> — blocks the turn. Use for anything that needs you: Q&amp;A, discovery, approvals.</li>
+<li><strong>Background</strong> — fires and forgets. Notification on completion. Use for long-running reads, profiling, test runs.</li>
+<li>The orchestrator <strong>spawns in parallel</strong> when tasks are independent — not sequentially.</li>
+</ul>
+</div>
+<div style="margin:6px 0 8px;padding:7px 12px;background:rgba(245,158,11,0.10);border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:rgba(240,246,252,0.85);line-height:1.45">
+<p>⚠️ <strong>Background agents must run without approval prompts.</strong> If a tool needs a human click and no one is watching, the agent sits blocked forever. Pre-allow every tool a background agent uses — or keep it in the foreground.</p>
+</div>
+<div class="dc-takeaway" style="padding:8px 14px;font-size:14px;margin:0">
+<p>Block only for the work you actually need to see.</p>
+</div>
+</div>
+<div class="dc-side-stack">
+<p><img data-src="images/Demo32_Background_Agent_1.png" alt="Background agent launched"></p>
+<p><img data-src="images/Demo32_Background_Agent_2.png" alt="Background agent completion notification"></p>
+</div>
+</div>
+<aside class="notes">
+<p>🎤 Scott — start a background <code>data-explorer</code>, then run a foreground AskUserQuestion flow. Show the async completion notification arriving mid-conversation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="demo-3.3-parallel-orchestration" class="slide level2 smaller">
+<h2>Demo 3.3 — Parallel Orchestration</h2>
+<div class="demo-with-side">
+<div class="demo-companion">
+<p><span class="dc-chip">Demo 3.3</span></p>
+<div class="dc-live">
+<p><strong>Live:</strong> three builder agents run at once — <code>dim_customer</code>, <code>dim_product</code>, <code>dim_date</code> — each in its own <strong>git worktree</strong>. No lock contention. No stepping on each other. One merge at the end.</p>
+</div>
+<h4 id="watch-for-2">Watch for</h4>
+<ul>
+<li><strong>One worktree per agent</strong> — isolated branch, isolated file tree, isolated context.</li>
+<li>All three write simultaneously. Orchestrator collects, runs tests, merges.</li>
+<li>Scales to whatever your machine can handle — <strong>not bounded by a single linear chat</strong>.</li>
+</ul>
+<div class="dc-takeaway">
+<p>Parallelism scales with worktrees, not tabs.</p>
+</div>
+</div>
+<div class="dc-side-stack">
+<p><img data-src="images/Demo33_ParallelAgent_1.png" alt="Parallel agents launched into worktrees"></p>
+<p><img data-src="images/Demo33_ParallelAgent_2.png" alt="Parallel agents converging on merge"></p>
+</div>
+</div>
+<aside class="notes">
+<p>🎤 Scott — spawn 3 parallel <code>dbt-dimension-builder</code> agents into separate worktrees. Tile the terminals so the audience sees 3 independent streams. Merge at the end.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="demo-3.4-user-touch-points" class="slide level2 smaller">
+<h2>Demo 3.4 — User Touch Points</h2>
+<div class="demo-with-side">
+<div class="demo-companion">
+<p><span class="dc-chip">Demo 3.4</span></p>
+<div class="dc-live">
+<p><strong>Live:</strong> the plugin interrupts the human <strong>exactly twice</strong> — once to <strong>collect</strong> requirements (Step 4), once to <strong>validate</strong> the proposed model design (Step 6). Everything else runs unattended.</p>
+</div>
+<h4 id="watch-for-3">Watch for</h4>
+<ul>
+<li><strong>Touch point 1 — Collect.</strong> <code>business-analyst</code> runs a structured <code>AskUserQuestion</code> covering business goals, KPIs, grain, rules. Answers land in Section 1 of the design doc.</li>
+<li><strong>Touch point 2 — Validate.</strong> Coordinator presents the <strong>semantic model first</strong> (“does this answer the right business questions?”), then the physical plan. Approve, revise, or abort.</li>
+<li><strong>Structured, not conversational.</strong> Pre-defined question sets + explicit approval events — no ad-hoc “what do you think?” chats mid-run.</li>
+</ul>
+<div class="dc-takeaway">
+<p>Two interruptions. One to understand the human. One to get their sign-off.</p>
+</div>
+</div>
+<div class="dc-side-stack">
+<p><img data-src="images/Demo34_UserTouchPoint_1.png" alt="Discovery Q&amp;A with AskUserQuestion"></p>
+<p><img data-src="images/Demo34_UserTouchPoint_2.png" alt="Design approval event — semantic model summary"></p>
+</div>
+</div>
+<aside class="notes">
+<p>🎤 Mihaly — trigger the discovery Q&amp;A and let the audience watch the 5 questions fire. Then jump to the design approval event and read the semantic model summary out loud.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="demo-3.5-shared-agent-memory" class="slide level2 smaller">
+<h2>Demo 3.5 — Shared Agent Memory</h2>
+<div class="demo-with-side">
+<div class="demo-companion">
+<p><span class="dc-chip">Demo 3.5</span></p>
+<div class="dc-live">
+<p><strong>Live:</strong> every agent reads and writes to one markdown file — <code>pipeline-design.md</code>. Business analyst fills Section 1. Data explorer fills Section 3. The builder reads both and never re-asks the user.</p>
+</div>
+<h4 id="watch-for-4">Watch for</h4>
+<ul>
+<li>One <strong>single source of truth</strong> — not 8 conversations each holding a fragment.</li>
+<li><strong>Structured sections</strong> — requirements, source profile, dimensional design, validation results.</li>
+<li>Memory lives in the <strong>repo</strong>. Git-versioned. Diffable. Reviewable.</li>
+</ul>
+<div class="dc-takeaway">
+<p>Memory lives in the repo, not the chat.</p>
+</div>
+</div>
+<p><img data-src="images/Demo35_SharedAgentMemory_1.png" class="dc-side" alt="pipeline-design.md shared by agents"></p>
+</div>
+<aside class="notes">
+<p>🎤 Scott — open <code>pipeline-design.md</code> and scroll. Show Section 1 written by the analyst agent, Section 3 by the explorer. Point at the shared reading pattern.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="demo-3.6-tool-calls-live-mcp" class="slide level2 smaller">
+<h2>Demo 3.6 — Tool Calls (Live MCP)</h2>
+<div class="demo-with-side">
+<div class="demo-companion">
+<p><span class="dc-chip">Demo 3.6</span></p>
+<div class="dc-live">
+<p><strong>Live:</strong> the agent reaches out through an MCP server to SQL Server — reading schemas, running profiles, executing dbt commands. Every call is explicit, inspectable, and replayable.</p>
+</div>
+<h4 id="watch-for-5">Watch for</h4>
+<ul>
+<li><strong>Curated surface</strong> — <code>sql-server-reader</code>, <code>sql-executor</code>, <code>dbt-runner</code>. Not raw ODBC; not bash pipes.</li>
+<li>Each call shows <strong>tool name + arguments</strong> — audit-ready by default.</li>
+<li>Tool descriptions tell the model <strong>when</strong> to use each one. No “which call?” confusion.</li>
+</ul>
+<div class="dc-takeaway">
+<p>Structured tool calls — not bash-and-pray.</p>
+</div>
+</div>
+<p><img data-src="images/Demo36_ToolCalls_1.png" class="dc-side" alt="Live MCP tool call with arguments"></p>
+</div>
+<aside class="notes">
+<p>🎤 Mihaly — scroll up the transcript and point at a real MCP call. Contrast with “imagine if this were <code>os.system('sqlcmd …')</code>”.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="demo-3.7-atomic-bash-zero-approvals" class="slide level2 smaller">
+<h2>Demo 3.7 — Atomic Bash → Zero Approvals</h2>
+<div class="demo-with-side" style="grid-template-columns:1fr 300px">
+<div class="demo-companion" style="padding:18px 26px">
+<p><span class="dc-chip">Demo 3.7</span></p>
+<div class="dc-live" style="margin:0 0 12px;padding-bottom:10px;font-size:14px">
+<p><strong>Goal:</strong> zero approval prompts. <strong>How:</strong> every Bash call is atomic → matched by the <code>PreToolUse</code> allowlist → runs silently. Compounds fall through → prompt → <strong>background agents hang.</strong></p>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px">
+<div style="font-size:13px;line-height:1.55">
+<p><strong>Forbidden in one Bash call</strong></p>
+<p><code>&amp;&amp;</code> <code>||</code> <code>;</code> chains · <code>|</code> <code>|&amp;</code> pipes · <code>&amp;</code> bg · <code>(…)</code> subshells · <code>`…`</code> <code>$(…)</code> substitution · <code>&lt;&lt;EOF</code> heredocs · <code>cd &lt;path&gt; &amp;&amp;</code> → use <code>git -C &lt;path&gt; …</code></p>
+</div>
+<div style="font-size:13px;line-height:1.55">
+<p><strong>If you need multi-step</strong></p>
+<p>▸ <strong>N separate Bash calls</strong> — read each result, decide next.<br>
+▸ <strong>A script</strong> in <code>skills/&lt;name&gt;/scripts/</code> — logic in code, invoked atomically.</p>
+</div>
+</div>
+<div class="dc-takeaway" style="padding:10px 16px;font-size:15px">
+<p>Atomic → pre-allowed → no prompts → agents run unattended.</p>
+</div>
+</div>
+<p><img data-src="images/Demo37_AtomicCode_1.png" class="dc-side" alt="Atomic Bash call auto-approved by PreToolUse allowlist"></p>
+</div>
+<aside class="notes">
+<p>🎤 Scott — frame the goal first: <em>“Zero approvals for routine work.”</em> Show atomic calls sailing through. Contrast: one compound <code>a &amp;&amp; b</code> would stall the pipeline. Cite I-041.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="demo-3.8-hooks-for-validation" class="slide level2 smaller">
+<h2>Demo 3.8 — Hooks for Validation</h2>
+<div class="demo-with-side">
+<div class="demo-companion">
+<p><span class="dc-chip">Demo 3.8</span></p>
+<div class="dc-live">
+<p><strong>Live:</strong> the agent writes a staging model. A <code>PreToolUse</code> hook auto-runs <code>dbt parse</code>. Syntax error → write rejected <em>before</em> it reaches disk. No human needed. No broken build.</p>
+</div>
+<h4 id="watch-for-6">Watch for</h4>
+<ul>
+<li><strong><code>PreToolUse</code></strong> — runs before a tool fires. Block bad writes at the edge.</li>
+<li><strong><code>PostToolUse</code></strong> — runs after. Auto-format, auto-test, auto-lint.</li>
+<li>Hooks are <strong>shell commands</strong> triggered by the harness — not instructions the model can forget.</li>
+</ul>
+<div class="dc-takeaway">
+<p>Policy as code. Not as conversation.</p>
+</div>
+</div>
+<p><img data-src="images/Demo38_Hooks_1.png" class="dc-side" alt="PreToolUse hook rejecting a bad write"></p>
+</div>
+<aside class="notes">
+<p>🎤 Mihaly — deliberately induce a SQL parse error and watch the hook bounce it. Then a clean write to show the hook going silent.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="what-youve-just-seen" class="slide level2 smaller">
+<h2>What you’ve just seen</h2>
+<style>
+.reveal .sum-wrap{max-width:1120px;margin:0 auto;text-align:left}
+.reveal .sum-row{margin-bottom:14px}
+.reveal .sum-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,246,252,0.55);margin-bottom:6px}
+.reveal .sum-chips{display:flex;flex-wrap:wrap;gap:6px}
+.reveal .sum-chip{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:4px 11px;font-size:12px;color:#f0f6fc;white-space:nowrap}
+.reveal .sum-chips.concepts .sum-chip{border-color:rgba(96,165,250,0.4);background:rgba(96,165,250,0.08)}
+.reveal .sum-chips.demos .sum-chip{border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.08)}
+.reveal .sum-takeaways{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.reveal .sum-take{background:linear-gradient(135deg,rgba(255,255,255,0.07) 0%,rgba(255,255,255,0.02) 100%);border:1px solid rgba(255,255,255,0.18);border-left:4px solid #f0f6fc;border-radius:10px;padding:14px 16px}
+.reveal .sum-take .sum-tnum{font-size:10px;font-weight:800;letter-spacing:0.1em;color:rgba(240,246,252,0.55);margin-bottom:4px}
+.reveal .sum-take .sum-tline{font-size:15px;font-weight:700;color:#f0f6fc;line-height:1.35;margin-bottom:4px}
+.reveal .sum-take .sum-tsub{font-size:12px;color:rgba(240,246,252,0.65);line-height:1.45}
+.reveal .sum-cta{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px;padding:12px 18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.15);border-radius:10px}
+.reveal .sum-cta .sum-ctalabel{font-size:12px;color:rgba(240,246,252,0.65);letter-spacing:0.04em}
+.reveal .sum-cta code{font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13px;color:#f0f6fc;background:#0b0b0d;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 12px}
+.reveal .sum-cta code .sum-slash{color:#60a5fa}
+</style>
+<aside class="notes">
+<p>🎤 Mihaly — the last full-content slide before Q&amp;A. Land the three takeaways in order, point at the chip rows as proof. Close with the install command: <em>“You don’t need to start from scratch — this is live on the marketplace today.”</em></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="sum-wrap">
+<div class="sum-row">
+<div class="sum-label">
+Part 1 · Eight concepts
+</div>
+<div class="sum-chips concepts">
+<p><span class="sum-chip">01 · Intent</span> <span class="sum-chip">02 · Context</span> <span class="sum-chip">03 · Instructions</span> <span class="sum-chip">04 · MCP</span> <span class="sum-chip">05 · Agents</span> <span class="sum-chip">06 · Skills</span> <span class="sum-chip">07 · Hooks</span> <span class="sum-chip">08 · Memory</span></p>
+</div>
+</div>
+<div class="sum-row">
+<div class="sum-label">
+Part 2 · Eight demo beats
+</div>
+<div class="sum-chips demos">
+<p><span class="sum-chip">3.1 · Multi-agent framework</span> <span class="sum-chip">3.2 · Foreground vs background</span> <span class="sum-chip">3.3 · Parallel orchestration</span> <span class="sum-chip">3.4 · User touch points</span> <span class="sum-chip">3.5 · Shared memory</span> <span class="sum-chip">3.6 · Tool calls (MCP)</span> <span class="sum-chip">3.7 · Atomic Bash → zero approvals</span> <span class="sum-chip">3.8 · Hooks for validation</span></p>
+</div>
+</div>
+<div class="sum-takeaways">
+<div class="sum-take">
+<div class="sum-tnum">
+Takeaway 1
+</div>
+<div class="sum-tline">
+AI amplifies good engineering.
+</div>
+<div class="sum-tsub">
+Work with it the right way and a strong engineer ships faster, safer, and further than before.
+</div>
+</div>
+<div class="sum-take">
+<div class="sum-tnum">
+Takeaway 2
+</div>
+<div class="sum-tline">
+The harness is the system.
+</div>
+<div class="sum-tsub">
+Build around the model: context · tools · agents · hooks · memory. That’s what makes it reliable.
+</div>
+</div>
+<div class="sum-take">
+<div class="sum-tnum">
+Takeaway 3
+</div>
+<div class="sum-tline">
+Own your agents.
+</div>
+<div class="sum-tsub">
+Understand how they work and how they fail — deep understanding compounds with every build.
+</div>
+</div>
+</div>
+<div class="sum-cta">
+<p><span class="sum-ctalabel">Try the plugin today</span> <code><span class="sum-slash">/plugin</span> marketplace add KavasiMihaly/AI-plugins</code></p>
+</div>
+</div>
+</section>
+<section id="want-to-build-your-own" class="slide level2 smaller" data-background-color="#1a1a2e" data-background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)">
+<h2>Want to build your own?</h2>
+<style>
+.reveal .training-card{max-width:1000px;margin:10px auto 0;display:grid;grid-template-columns:220px 1fr;gap:26px;align-items:center;padding:28px 32px;background:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 100%);border:1px solid rgba(255,255,255,0.22);border-left:5px solid #f59e0b;border-radius:14px;text-align:left}
+.reveal .training-card .t-left{text-align:center}
+.reveal .training-card .t-pill{display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#1a1a1f;background:#f59e0b;padding:4px 11px;border-radius:4px;margin-bottom:10px}
+.reveal .training-card .t-badge{font-size:54px;line-height:1;margin-bottom:6px}
+.reveal .training-card .t-logo{display:block;width:100%;max-width:180px;height:auto;margin:0 auto 10px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5))}
+.reveal .training-card .t-day{font-size:17px;font-weight:800;color:#f0f6fc;line-height:1.2}
+.reveal .training-card .t-event{font-size:12px;color:rgba(240,246,252,0.6);margin-top:4px;letter-spacing:0.02em}
+.reveal .training-card .t-date{font-size:12.5px;font-weight:700;color:#f59e0b;margin-top:8px;letter-spacing:0.02em;display:flex;align-items:center;justify-content:center;gap:5px}
+.reveal .training-card h3{font-size:22px;font-weight:700;color:#f0f6fc;margin:0 0 8px 0;letter-spacing:-0.01em}
+.reveal .training-card .t-pitch{font-size:14px;color:rgba(240,246,252,0.8);line-height:1.55;margin:0 0 12px 0}
+.reveal .training-card ul{list-style:none;padding:0;margin:0 0 14px 0}
+.reveal .training-card ul li{font-size:13px;color:#f0f6fc;line-height:1.5;padding-left:18px;position:relative;margin-bottom:4px}
+.reveal .training-card ul li::before{content:"▸";position:absolute;left:0;color:#f59e0b;font-weight:700}
+.reveal .training-card .t-url{display:inline-block;margin-top:4px;padding:10px 16px;background:#f59e0b;color:#1a1a1f;font-weight:700;font-size:13px;border-radius:8px;text-decoration:none;letter-spacing:0.02em;font-family:'SF Mono',Menlo,Consolas,monospace}
+.reveal .training-card .t-url::before{content:"↗ ";opacity:0.7}
+</style>
+<aside class="notes">
+<p>🎤 Mihaly + Scott — straight after the summary, before Q&amp;A. Brief: <em>“Loved what you saw? Come spend a full day with us at Data Platform Next Step — you’ll walk out with your own version of this plugin running against your data.”</em> Keep it under 30 seconds.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="training-card">
+<div class="t-left">
+<span class="t-pill">Full-day workshop</span> <img class="t-logo" src="images/dataplafrom_next_step_logo.webp" alt="Data Platform Next Step">
+<div class="t-day">
+Deep-dive training
+</div>
+<div class="t-date">
+📅 Mon · 1 June 2026
+</div>
+</div>
+<div>
+<h3>
+Build your own agentic data pipeline
+</h3>
+<p class="t-pitch">
+A hands-on day that takes everything from this 60 minutes and turns it into something you ship at work. You’ll leave with a working plugin pointed at <em>your</em> stack.
+</p>
+<ul>
+<li>
+Design your own orchestrator + specialist sub-agents
+</li>
+<li>
+Wire up MCP servers for your warehouse &amp; BI tools
+</li>
+<li>
+Author hooks, skills, and atomic-command policies
+</li>
+<li>
+Ship a validated, tested pipeline by end of day
+</li>
+</ul>
+<p><a class="t-url" href="https://dataplatformnextstep.com/training-sessions/">dataplatformnextstep.com/training-sessions</a></p>
+</div>
+</div>
+</section>
+<section id="section-2" class="slide level2 section-slide" data-background-color="#1a1a2e" data-background-gradient="linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 60%, #3d1111 100%)">
+<h2></h2>
+</section></section>
+<section>
+<section id="where-this-is-going" class="title-slide slide level1 center">
+<h1>Where this is going</h1>
+<p>Five patterns moving from solo developer — to team — to platform.</p>
+<aside class="notes">
+<p>🎤 Scott — HANDOFF from Mihaly. 5 min total for Looking Ahead. Transition line: “What you just watched is 2026 craft. Here’s what’s pushing on the edges next.”</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="emerging-patterns" class="slide level2 smaller">
+<h2>Emerging Patterns</h2>
+<style>
+.reveal .emerging-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:left;max-width:1200px;margin:20px auto;font-family:'Inter',sans-serif}
+.reveal .emerging-grid .ecard{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:18px}
+.reveal .emerging-grid .ecard.span2{grid-column:span 2}
+.reveal .emerging-grid .eicon{font-size:26px;margin-bottom:8px}
+.reveal .emerging-grid h5{margin:0 0 6px 0;font-size:15px;color:#f0f6fc}
+.reveal .emerging-grid p{margin:0;font-size:12px;color:rgba(240,246,252,0.7);line-height:1.5}
+.reveal .emerging-grid .etag{display:inline-block;margin-top:8px;padding:3px 8px;background:rgba(255,255,255,0.08);border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.75)}
+</style>
+<div class="emerging-grid">
+<div class="ecard">
+<div class="eicon">
+<p>🤝</p>
+</div>
+<h5>
+Agent Teams
+</h5>
+<p>Structured collaboration between specialist agents, not just delegation. Roles, hand-offs, and accountability — closer to an org chart than a function call.</p>
+<div class="etag">
+<p>Team</p>
+</div>
+</div>
+<div class="ecard">
+<div class="eicon">
+<p>🌳</p>
+</div>
+<h5>
+Work Trees
+</h5>
+<p>Isolated git worktrees per agent task. Parallel experimentation without stepping on each other. You saw the primitive in 3.8 — this goes wider.</p>
+<div class="etag">
+<p>Solo → Team</p>
+</div>
+</div>
+<div class="ecard">
+<div class="eicon">
+<p>🐝</p>
+</div>
+<h5>
+Agentic Platform Swarms
+</h5>
+<p>Platform-level agents that coordinate across projects, not per-repo. Shared observability, shared hooks, shared memory — across the data estate.</p>
+<div class="etag">
+<p>Platform</p>
+</div>
+</div>
+<div class="ecard">
+<div class="eicon">
+<p>📥</p>
+</div>
+<h5>
+Agentic Dataset Onboarding
+</h5>
+<p>Agents bringing new sources into the platform <em>SOP-first</em>, not ad-hoc. The SOP becomes executable — each new dataset runs the same 14-step gate.</p>
+<div class="etag">
+<p>Platform</p>
+</div>
+</div>
+<div class="ecard span2">
+<div class="eicon">
+<p>🕸</p>
+</div>
+<h5>
+Better Agentic Memory / Context Graphs
+</h5>
+<p>Flat MEMORY.md becomes a graph. Facts have relationships — <em>this decision depended on that requirement, which came from that stakeholder</em>. Retrieval over structure beats retrieval over blobs.</p>
+<div class="etag">
+<p>The hardest open problem</p>
+</div>
+</div>
+</div>
+<div class="subtext">
+<p>Things are moving so fast, this is probably outdated by the end of the day!</p>
+</div>
+<aside class="notes">
+<p>🎤 Scott — 3 min on this slide. One sentence per card, then dwell on “Better Memory” as the hardest open problem. Bridge: “That’s where it’s going — but whatever comes next, the core idea stays the same.” Hand to Mihaly for the summary.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section class="slide level2">
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>SQLBits 2026 · Building Context, Not Vibes · Part 2</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="part2_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="part2_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/multiplex/socket.io.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/multiplex/multiplex.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="part2_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="part2_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'multiplex': {"id":"1ea875674b17ca76","secret":null,"url":"https://multiplex.up.railway.app/"},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
